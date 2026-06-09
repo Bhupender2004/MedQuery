@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedQuery - AI Drug Interaction Assistant</title>
+    <meta name="description" content="AI-powered medical assistant for cross-checking drug interactions and scanning clinical reference papers.">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <a href="/" class="logo-brand">
+                <span>Med</span>Query
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="/" class="active">Home</a></li>
+                    <li><a href="/chat">Assistant</a></li>
+                    <li><a href="/upload">Upload Desk</a></li>
+                    <li><a href="/dashboard">Analytics Console</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="dashboard-card" style="padding: 4rem 2.5rem; text-align: center; background: radial-gradient(circle at top right, hsla(175, 75%, 45%, 0.1), transparent); margin-bottom: 2.5rem;">
+            <h1 style="font-size: 3rem; font-weight: 800; line-height: 1.2; letter-spacing: -1px; margin-bottom: 1.5rem;">
+                AI-Powered <span style="color: var(--accent-teal);">Drug Interaction</span> Assistant
+            </h1>
+            <p style="font-size: 1.25rem; color: var(--text-secondary); max-width: 800px; margin: 0 auto 2.5rem auto;">
+                Securely upload medical reference files, scan drug combinations, and cross-reference safety rules in real-time using local embeddings and semantic intelligence.
+            </p>
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                <a href="/chat" class="btn-primary" style="text-decoration: none; font-size: 1.1rem; padding: 0.9rem 2rem;">
+                    Launch Assistant
+                </a>
+                <a href="/upload" class="btn-primary" style="text-decoration: none; background-color: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); font-size: 1.1rem; padding: 0.9rem 2rem; box-shadow: none;">
+                    Upload Reference PDFs
+                </a>
+            </div>
+        </section>
+
+        <!-- Feature Portal Cards Grid -->
+        <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 2.5rem;">
+            <div class="dashboard-card">
+                <span style="font-size: 2.5rem; display: block; margin-bottom: 1rem;">💬</span>
+                <h3 style="font-size: 1.3rem; font-weight: 600; margin-bottom: 0.75rem;">Semantic Chat Console</h3>
+                <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.5rem;">
+                    Query clinical warnings and ask composite questions about medications. Context is retrieved dynamically from your custom vector libraries.
+                </p>
+                <a href="/chat" style="color: var(--accent-teal); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 0.25rem;">
+                    Go to Chat &rarr;
+                </a>
+            </div>
+
+            <div class="dashboard-card">
+                <span style="font-size: 2.5rem; display: block; margin-bottom: 1rem;">📂</span>
+                <h3 style="font-size: 1.3rem; font-weight: 600; margin-bottom: 0.75rem;">Document Ingestion Desk</h3>
+                <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.5rem;">
+                    Drag-and-drop research journals, PDF prescription sheets, or text files to build a local vector index of specialized clinical guidelines.
+                </p>
+                <a href="/upload" style="color: var(--accent-teal); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 0.25rem;">
+                    Upload Files &rarr;
+                </a>
+            </div>
+
+            <div class="dashboard-card">
+                <span style="font-size: 2.5rem; display: block; margin-bottom: 1rem;">📈</span>
+                <h3 style="font-size: 1.3rem; font-weight: 600; margin-bottom: 0.75rem;">Analytics & Audit Logs</h3>
+                <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.5rem;">
+                    Monitor system health, check total indexed assets, review logged user interactions, and keep track of warning classifications.
+                </p>
+                <a href="/dashboard" style="color: var(--accent-teal); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 0.25rem;">
+                    Open Console &rarr;
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 MedQuery Healthcare AI. All rights reserved. For clinical reference assistant purposes only.</p>
+    </footer>
+</body>
+</html>

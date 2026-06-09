@@ -1,0 +1,3 @@
+"""
+MedQuery Tests Suite package.
+"""

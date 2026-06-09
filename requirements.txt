@@ -1,0 +1,20 @@
+# Core Web Framework
+Flask>=3.0.0
+Flask-SQLAlchemy>=3.1.0
+PyMySQL>=1.1.0
+
+# Vector Database and AI
+chromadb>=0.4.24
+sentence-transformers>=2.6.0
+google-generativeai>=0.4.0
+
+# Settings & Configuration Management
+python-dotenv>=1.0.1
+pydantic-settings>=2.2.1
+
+# Production WSGI Server
+gunicorn>=21.2.0
+
+# Testing (Development)
+pytest>=8.0.0
+pytest-cov>=4.1.0

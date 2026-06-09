@@ -1,0 +1,5 @@
+drug_a,drug_b,severity,mechanism,recommendation
+Aspirin,Warfarin,major,Additive antiplatelet and anticoagulant pharmacological activity increases internal hemorrhage risks.,Avoid concurrent use unless strictly supervised. Monitor coagulation parameters (INR) frequently.
+Ibuprofen,Lisinopril,moderate,NSAIDs impair renal perfusion and inhibit prostaglandin synthesis which lowers ACE inhibitor vasodilatory capacity.,Monitor patient blood pressure parameters. Check renal function markers periodically.
+Metformin,Contrast Media,major,Concomitant iodine contrast studies in metformin patients might cause acute kidney injury or lactic acidosis.,Suspend metformin dosing 48 hours prior to and after contrast radiographic examinations.
+Sildenafil,Nitroglycerin,major,Synergistic nitric oxide accumulation triggers critical systemic vasodilation and extreme arterial hypotension.,Co-administration is strictly contraindicated.

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedQuery - Assistant Chat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <a href="/" class="logo-brand">
+                <span>Med</span>Query
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/chat" class="active">Assistant</a></li>
+                    <li><a href="/upload">Upload Desk</a></li>
+                    <li><a href="/dashboard">Analytics Console</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main style="display: grid; grid-template-columns: 3fr 1fr; gap: 2rem; align-items: start;">
+        <!-- Conversational Interface Column -->
+        <section class="chat-container">
+            <div class="chat-messages" id="chat-messages">
+                <div class="message assistant">
+                    <p>Hello! I am your clinical pharmacy assistant. Type in drug names or clinical combinations to verify interactions and check against your uploaded reference documents.</p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">Try asking: <em>"Can I take Aspirin with Warfarin?"</em> or <em>"Is there an issue with Ibuprofen and Lisinopril?"</em></p>
+                </div>
+            </div>
+            <form id="chat-form" class="chat-input-area">
+                <input type="text" id="chat-input" class="chat-input" placeholder="Query medications (e.g. Aspirin + Warfarin)..." autocomplete="off" required>
+                <button type="submit" class="btn-primary">Verify Interaction</button>
+            </form>
+        </section>
+
+        <!-- Quick Help / Instructions Column -->
+        <aside style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <div class="dashboard-card" style="padding: 1.25rem;">
+                <h4 style="font-weight: 600; margin-bottom: 0.75rem; color: var(--accent-teal);">Clinical Checklist</h4>
+                <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.85rem; color: var(--text-secondary);">
+                    <li>✅ Local rules lookup</li>
+                    <li>🔎 Vector-similar excerpt retrieval</li>
+                    <li>🤖 LLM reasoning synthesis</li>
+                    <li>📑 Contextual references</li>
+                </ul>
+            </div>
+            
+            <div class="dashboard-card" style="padding: 1.25rem; border-color: rgba(200, 80, 50, 0.25);">
+                <h4 style="font-weight: 600; margin-bottom: 0.5rem; color: var(--warning-moderate);">Note</h4>
+                <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">
+                    Check warnings and cross-examine pages from original guidelines before making modifications to drug therapies.
+                </p>
+            </div>
+        </aside>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 MedQuery Healthcare AI. All rights reserved. For clinical reference assistant purposes only.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+</body>
+</html>

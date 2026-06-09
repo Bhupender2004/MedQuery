@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedQuery - Analytics Console</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <a href="/" class="logo-brand">
+                <span>Med</span>Query
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/chat">Assistant</a></li>
+                    <li><a href="/upload">Upload Desk</a></li>
+                    <li><a href="/dashboard" class="active">Analytics Console</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Analytical Cards Row -->
+        <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+            <div class="dashboard-card" style="text-align: center; padding: 2rem 1.5rem;">
+                <span style="font-size: 1.1rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 0.5rem;">Total Queries</span>
+                <span id="count-queries" style="font-size: 3rem; font-weight: 700; color: var(--text-primary);">0</span>
+            </div>
+
+            <div class="dashboard-card" style="text-align: center; padding: 2rem 1.5rem; border-color: rgba(200, 80, 50, 0.25);">
+                <span style="font-size: 1.1rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 0.5rem;">Active Warnings</span>
+                <span id="count-warnings" style="font-size: 3rem; font-weight: 700; color: var(--warning-major);">0</span>
+            </div>
+
+            <div class="dashboard-card" style="text-align: center; padding: 2rem 1.5rem;">
+                <span style="font-size: 1.1rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 0.5rem;">Indexed Guides</span>
+                <span id="count-documents" style="font-size: 3rem; font-weight: 700; color: var(--accent-teal);">0</span>
+            </div>
+
+            <div class="dashboard-card" style="text-align: center; padding: 2rem 1.5rem;">
+                <span style="font-size: 1.1rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 0.5rem;">Interaction Rules</span>
+                <span id="count-rules" style="font-size: 3rem; font-weight: 700; color: var(--text-primary);">0</span>
+            </div>
+        </section>
+
+        <!-- Logs Tables -->
+        <section class="dashboard-card" style="overflow-x: auto;">
+            <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--accent-teal);">
+                Recent Audited Interactions & Logs
+            </h3>
+            
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr style="border-bottom: 2px solid var(--border-color); color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; font-weight: 700;">
+                        <th style="padding: 1rem;">Timestamp</th>
+                        <th style="padding: 1rem;">Query String</th>
+                        <th style="padding: 1rem;">Interaction Status</th>
+                        <th style="padding: 1rem; text-align:right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="dashboard-logs-tbody">
+                    <!-- Populated dynamically via dashboard.js -->
+                    <tr>
+                        <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">
+                            Querying backend metrics...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 MedQuery Healthcare AI. All rights reserved. For clinical reference assistant purposes only.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
