@@ -1,7 +1,7 @@
-# Core Web Framework
 Flask>=3.0.0
 Flask-SQLAlchemy>=3.1.0
 PyMySQL>=1.1.0
+pandas>=2.0.0
 
 # Vector Database and AI
 chromadb>=0.4.24

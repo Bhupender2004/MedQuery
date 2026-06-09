@@ -1,5 +1,412 @@
-drug_a,drug_b,severity,mechanism,recommendation
-Aspirin,Warfarin,major,Additive antiplatelet and anticoagulant pharmacological activity increases internal hemorrhage risks.,Avoid concurrent use unless strictly supervised. Monitor coagulation parameters (INR) frequently.
-Ibuprofen,Lisinopril,moderate,NSAIDs impair renal perfusion and inhibit prostaglandin synthesis which lowers ACE inhibitor vasodilatory capacity.,Monitor patient blood pressure parameters. Check renal function markers periodically.
-Metformin,Contrast Media,major,Concomitant iodine contrast studies in metformin patients might cause acute kidney injury or lactic acidosis.,Suspend metformin dosing 48 hours prior to and after contrast radiographic examinations.
-Sildenafil,Nitroglycerin,major,Synergistic nitric oxide accumulation triggers critical systemic vasodilation and extreme arterial hypotension.,Co-administration is strictly contraindicated.
+drug_a,drug_b,severity,description
+Aspirin,Warfarin,High,Co-administration increases risk of major bleeding due to antiplatelet and anticoagulant synergy.
+Ibuprofen,Warfarin,High,Increased risk of gastrointestinal ulceration and severe bleeding. NSAID antiplatelet effects compound anticoagulant risks.
+Clopidogrel,Warfarin,High,Dual antiplatelet and anticoagulant therapy significantly elevates risk of life-threatening bleeding.
+Alcohol,Metformin,High,Concomitant use increases risk of severe lactic acidosis and hypoglycemia. Metformin should be avoided in chronic heavy drinkers.
+Nitroglycerin,Sildenafil,High,"Severe, life-threatening hypotension. Sildenafil potentiates the vasodilatory effects of organic nitrates."
+Atorvastatin,Clarithromycin,High,"Potent CYP3A4 inhibition by Clarithromycin elevates Atorvastatin levels, increasing risk of rhabdomyolysis and acute kidney injury."
+Amlodipine,Simvastatin,Moderate,Amlodipine increases Simvastatin exposure. Limit Simvastatin dose to 20 mg daily to avoid myopathy risks.
+Grapefruit Juice,Simvastatin,Moderate,"Grapefruit juice inhibits CYP3A4, increasing Simvastatin levels and risks of muscle toxicity."
+Alcohol,Paracetamol,Moderate,"Chronic alcohol use accelerates acetaminophen conversion to toxic metabolites, raising hepatotoxicity risks even at therapeutic doses."
+Ibuprofen,Prednisone,Moderate,Increased risk of gastrointestinal ulceration and mucosal bleeding. Avoid concurrent use if possible.
+Sertraline,Tramadol,High,"Increased risk of serotonin syndrome, characterized by mental status changes, neuromuscular hyperactivity, and autonomic instability."
+Fluoxetine,Tramadol,High,Increased risk of serotonin syndrome due to additive serotonergic activity and CYP2D6 inhibition by Fluoxetine.
+Levothyroxine,Others,Low,Calcium supplements or antacids may reduce Levothyroxine absorption. Separate doses by at least 4 hours.
+Clopidogrel,Omeprazole,Moderate,Omeprazole reduces the therapeutic antiplatelet efficacy of Clopidogrel by inhibiting CYP2C19 bioactivation.
+Alcohol,Cetirizine,Low,"Additive central nervous system depression. May cause severe drowsiness, fatigue, and psychomotor impairment."
+Insulin,Metoprolol,Moderate,"Metoprolol can mask symptoms of hypoglycemia, such as tremors and tachycardia, delaying patient response to low blood sugar."
+Lisinopril,Spironolactone,Moderate,ACE inhibitor combined with potassium-sparing diuretic increases risk of hyperkalemia. Monitor serum potassium.
+Clopidogrel,Ibuprofen,High,Concomitant use increases the risk of severe gastrointestinal bleeding and systemic hemorrhage due to additive antiplatelet and anticoagulant effects.
+Apixaban,Ibuprofen,High,Concomitant use increases the risk of severe gastrointestinal bleeding and systemic hemorrhage due to additive antiplatelet and anticoagulant effects.
+Ibuprofen,Rivaroxaban,High,Concomitant use increases the risk of severe gastrointestinal bleeding and systemic hemorrhage due to additive antiplatelet and anticoagulant effects.
+Heparin,Ibuprofen,High,Concomitant use increases the risk of severe gastrointestinal bleeding and systemic hemorrhage due to additive antiplatelet and anticoagulant effects.
+Naproxen,Warfarin,High,Concomitant use increases the risk of severe gastrointestinal bleeding and systemic hemorrhage due to additive antiplatelet and anticoagulant effects.
+Clopidogrel,Naproxen,High,Concomitant use increases the risk of severe gastrointestinal bleeding and systemic hemorrhage due to additive antiplatelet and anticoagulant effects.
+Apixaban,Naproxen,High,Concomitant use increases the risk of severe gastrointestinal bleeding and systemic hemorrhage due to additive antiplatelet and anticoagulant effects.
+Naproxen,Rivaroxaban,High,Concomitant use increases the risk of severe gastrointestinal bleeding and systemic hemorrhage due to additive antiplatelet and anticoagulant effects.
+Heparin,Naproxen,High,Concomitant use increases the risk of severe gastrointestinal bleeding and systemic hemorrhage due to additive antiplatelet and anticoagulant effects.
+Aspirin,Clopidogrel,High,Concomitant use increases the risk of severe gastrointestinal bleeding and systemic hemorrhage due to additive antiplatelet and anticoagulant effects.
+Apixaban,Aspirin,High,Concomitant use increases the risk of severe gastrointestinal bleeding and systemic hemorrhage due to additive antiplatelet and anticoagulant effects.
+Aspirin,Rivaroxaban,High,Concomitant use increases the risk of severe gastrointestinal bleeding and systemic hemorrhage due to additive antiplatelet and anticoagulant effects.
+Aspirin,Heparin,High,Concomitant use increases the risk of severe gastrointestinal bleeding and systemic hemorrhage due to additive antiplatelet and anticoagulant effects.
+Celecoxib,Warfarin,High,Concomitant use increases the risk of severe gastrointestinal bleeding and systemic hemorrhage due to additive antiplatelet and anticoagulant effects.
+Celecoxib,Clopidogrel,High,Concomitant use increases the risk of severe gastrointestinal bleeding and systemic hemorrhage due to additive antiplatelet and anticoagulant effects.
+Apixaban,Celecoxib,High,Concomitant use increases the risk of severe gastrointestinal bleeding and systemic hemorrhage due to additive antiplatelet and anticoagulant effects.
+Celecoxib,Rivaroxaban,High,Concomitant use increases the risk of severe gastrointestinal bleeding and systemic hemorrhage due to additive antiplatelet and anticoagulant effects.
+Celecoxib,Heparin,High,Concomitant use increases the risk of severe gastrointestinal bleeding and systemic hemorrhage due to additive antiplatelet and anticoagulant effects.
+Diclofenac,Warfarin,High,Concomitant use increases the risk of severe gastrointestinal bleeding and systemic hemorrhage due to additive antiplatelet and anticoagulant effects.
+Clopidogrel,Diclofenac,High,Concomitant use increases the risk of severe gastrointestinal bleeding and systemic hemorrhage due to additive antiplatelet and anticoagulant effects.
+Apixaban,Diclofenac,High,Concomitant use increases the risk of severe gastrointestinal bleeding and systemic hemorrhage due to additive antiplatelet and anticoagulant effects.
+Diclofenac,Rivaroxaban,High,Concomitant use increases the risk of severe gastrointestinal bleeding and systemic hemorrhage due to additive antiplatelet and anticoagulant effects.
+Diclofenac,Heparin,High,Concomitant use increases the risk of severe gastrointestinal bleeding and systemic hemorrhage due to additive antiplatelet and anticoagulant effects.
+Ibuprofen,Lisinopril,Moderate,"NSAIDs (Ibuprofen) inhibit renal prostaglandins, which may decrease the antihypertensive efficacy of ACE inhibitors (Lisinopril)/ARBs and increase the risk of acute renal impairment."
+Ibuprofen,Losartan,Moderate,"NSAIDs (Ibuprofen) inhibit renal prostaglandins, which may decrease the antihypertensive efficacy of ACE inhibitors (Losartan)/ARBs and increase the risk of acute renal impairment."
+Enalapril,Ibuprofen,Moderate,"NSAIDs (Ibuprofen) inhibit renal prostaglandins, which may decrease the antihypertensive efficacy of ACE inhibitors (Enalapril)/ARBs and increase the risk of acute renal impairment."
+Ibuprofen,Valsartan,Moderate,"NSAIDs (Ibuprofen) inhibit renal prostaglandins, which may decrease the antihypertensive efficacy of ACE inhibitors (Valsartan)/ARBs and increase the risk of acute renal impairment."
+Ibuprofen,Ramipril,Moderate,"NSAIDs (Ibuprofen) inhibit renal prostaglandins, which may decrease the antihypertensive efficacy of ACE inhibitors (Ramipril)/ARBs and increase the risk of acute renal impairment."
+Lisinopril,Naproxen,Moderate,"NSAIDs (Naproxen) inhibit renal prostaglandins, which may decrease the antihypertensive efficacy of ACE inhibitors (Lisinopril)/ARBs and increase the risk of acute renal impairment."
+Losartan,Naproxen,Moderate,"NSAIDs (Naproxen) inhibit renal prostaglandins, which may decrease the antihypertensive efficacy of ACE inhibitors (Losartan)/ARBs and increase the risk of acute renal impairment."
+Enalapril,Naproxen,Moderate,"NSAIDs (Naproxen) inhibit renal prostaglandins, which may decrease the antihypertensive efficacy of ACE inhibitors (Enalapril)/ARBs and increase the risk of acute renal impairment."
+Naproxen,Valsartan,Moderate,"NSAIDs (Naproxen) inhibit renal prostaglandins, which may decrease the antihypertensive efficacy of ACE inhibitors (Valsartan)/ARBs and increase the risk of acute renal impairment."
+Naproxen,Ramipril,Moderate,"NSAIDs (Naproxen) inhibit renal prostaglandins, which may decrease the antihypertensive efficacy of ACE inhibitors (Ramipril)/ARBs and increase the risk of acute renal impairment."
+Aspirin,Lisinopril,Moderate,"NSAIDs (Aspirin) inhibit renal prostaglandins, which may decrease the antihypertensive efficacy of ACE inhibitors (Lisinopril)/ARBs and increase the risk of acute renal impairment."
+Aspirin,Losartan,Moderate,"NSAIDs (Aspirin) inhibit renal prostaglandins, which may decrease the antihypertensive efficacy of ACE inhibitors (Losartan)/ARBs and increase the risk of acute renal impairment."
+Aspirin,Enalapril,Moderate,"NSAIDs (Aspirin) inhibit renal prostaglandins, which may decrease the antihypertensive efficacy of ACE inhibitors (Enalapril)/ARBs and increase the risk of acute renal impairment."
+Aspirin,Valsartan,Moderate,"NSAIDs (Aspirin) inhibit renal prostaglandins, which may decrease the antihypertensive efficacy of ACE inhibitors (Valsartan)/ARBs and increase the risk of acute renal impairment."
+Aspirin,Ramipril,Moderate,"NSAIDs (Aspirin) inhibit renal prostaglandins, which may decrease the antihypertensive efficacy of ACE inhibitors (Ramipril)/ARBs and increase the risk of acute renal impairment."
+Celecoxib,Lisinopril,Moderate,"NSAIDs (Celecoxib) inhibit renal prostaglandins, which may decrease the antihypertensive efficacy of ACE inhibitors (Lisinopril)/ARBs and increase the risk of acute renal impairment."
+Celecoxib,Losartan,Moderate,"NSAIDs (Celecoxib) inhibit renal prostaglandins, which may decrease the antihypertensive efficacy of ACE inhibitors (Losartan)/ARBs and increase the risk of acute renal impairment."
+Celecoxib,Enalapril,Moderate,"NSAIDs (Celecoxib) inhibit renal prostaglandins, which may decrease the antihypertensive efficacy of ACE inhibitors (Enalapril)/ARBs and increase the risk of acute renal impairment."
+Celecoxib,Valsartan,Moderate,"NSAIDs (Celecoxib) inhibit renal prostaglandins, which may decrease the antihypertensive efficacy of ACE inhibitors (Valsartan)/ARBs and increase the risk of acute renal impairment."
+Celecoxib,Ramipril,Moderate,"NSAIDs (Celecoxib) inhibit renal prostaglandins, which may decrease the antihypertensive efficacy of ACE inhibitors (Ramipril)/ARBs and increase the risk of acute renal impairment."
+Diclofenac,Lisinopril,Moderate,"NSAIDs (Diclofenac) inhibit renal prostaglandins, which may decrease the antihypertensive efficacy of ACE inhibitors (Lisinopril)/ARBs and increase the risk of acute renal impairment."
+Diclofenac,Losartan,Moderate,"NSAIDs (Diclofenac) inhibit renal prostaglandins, which may decrease the antihypertensive efficacy of ACE inhibitors (Losartan)/ARBs and increase the risk of acute renal impairment."
+Diclofenac,Enalapril,Moderate,"NSAIDs (Diclofenac) inhibit renal prostaglandins, which may decrease the antihypertensive efficacy of ACE inhibitors (Enalapril)/ARBs and increase the risk of acute renal impairment."
+Diclofenac,Valsartan,Moderate,"NSAIDs (Diclofenac) inhibit renal prostaglandins, which may decrease the antihypertensive efficacy of ACE inhibitors (Valsartan)/ARBs and increase the risk of acute renal impairment."
+Diclofenac,Ramipril,Moderate,"NSAIDs (Diclofenac) inhibit renal prostaglandins, which may decrease the antihypertensive efficacy of ACE inhibitors (Ramipril)/ARBs and increase the risk of acute renal impairment."
+Lisinopril,Paracetamol,Moderate,Combining ACE inhibitors (Paracetamol) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Levothyroxine,Lisinopril,Moderate,Combining ACE inhibitors (Levothyroxine) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Albuterol,Lisinopril,Moderate,Combining ACE inhibitors (Albuterol) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Lisinopril,Tramadol,Moderate,Combining ACE inhibitors (Tramadol) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Lisinopril,Sertraline,Moderate,Combining ACE inhibitors (Sertraline) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Fluoxetine,Lisinopril,Moderate,Combining ACE inhibitors (Fluoxetine) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Alcohol,Lisinopril,Moderate,Combining ACE inhibitors (Alcohol) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Grapefruit Juice,Lisinopril,Moderate,Combining ACE inhibitors (Grapefruit Juice) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Lisinopril,Nitroglycerin,Moderate,Combining ACE inhibitors (Nitroglycerin) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Losartan,Paracetamol,Moderate,Combining ACE inhibitors (Paracetamol) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Levothyroxine,Losartan,Moderate,Combining ACE inhibitors (Levothyroxine) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Albuterol,Losartan,Moderate,Combining ACE inhibitors (Albuterol) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Losartan,Tramadol,Moderate,Combining ACE inhibitors (Tramadol) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Losartan,Sertraline,Moderate,Combining ACE inhibitors (Sertraline) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Fluoxetine,Losartan,Moderate,Combining ACE inhibitors (Fluoxetine) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Losartan,Spironolactone,Moderate,Combining ACE inhibitors (Spironolactone) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Alcohol,Losartan,Moderate,Combining ACE inhibitors (Alcohol) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Grapefruit Juice,Losartan,Moderate,Combining ACE inhibitors (Grapefruit Juice) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Losartan,Nitroglycerin,Moderate,Combining ACE inhibitors (Nitroglycerin) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Enalapril,Paracetamol,Moderate,Combining ACE inhibitors (Paracetamol) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Enalapril,Levothyroxine,Moderate,Combining ACE inhibitors (Levothyroxine) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Albuterol,Enalapril,Moderate,Combining ACE inhibitors (Albuterol) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Enalapril,Tramadol,Moderate,Combining ACE inhibitors (Tramadol) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Enalapril,Sertraline,Moderate,Combining ACE inhibitors (Sertraline) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Enalapril,Fluoxetine,Moderate,Combining ACE inhibitors (Fluoxetine) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Enalapril,Spironolactone,Moderate,Combining ACE inhibitors (Spironolactone) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Alcohol,Enalapril,Moderate,Combining ACE inhibitors (Alcohol) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Enalapril,Grapefruit Juice,Moderate,Combining ACE inhibitors (Grapefruit Juice) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Enalapril,Nitroglycerin,Moderate,Combining ACE inhibitors (Nitroglycerin) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Paracetamol,Valsartan,Moderate,Combining ACE inhibitors (Paracetamol) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Levothyroxine,Valsartan,Moderate,Combining ACE inhibitors (Levothyroxine) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Albuterol,Valsartan,Moderate,Combining ACE inhibitors (Albuterol) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Tramadol,Valsartan,Moderate,Combining ACE inhibitors (Tramadol) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Sertraline,Valsartan,Moderate,Combining ACE inhibitors (Sertraline) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Fluoxetine,Valsartan,Moderate,Combining ACE inhibitors (Fluoxetine) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Spironolactone,Valsartan,Moderate,Combining ACE inhibitors (Spironolactone) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Alcohol,Valsartan,Moderate,Combining ACE inhibitors (Alcohol) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Grapefruit Juice,Valsartan,Moderate,Combining ACE inhibitors (Grapefruit Juice) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Nitroglycerin,Valsartan,Moderate,Combining ACE inhibitors (Nitroglycerin) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Paracetamol,Ramipril,Moderate,Combining ACE inhibitors (Paracetamol) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Levothyroxine,Ramipril,Moderate,Combining ACE inhibitors (Levothyroxine) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Albuterol,Ramipril,Moderate,Combining ACE inhibitors (Albuterol) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Ramipril,Tramadol,Moderate,Combining ACE inhibitors (Tramadol) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Ramipril,Sertraline,Moderate,Combining ACE inhibitors (Sertraline) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Fluoxetine,Ramipril,Moderate,Combining ACE inhibitors (Fluoxetine) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Ramipril,Spironolactone,Moderate,Combining ACE inhibitors (Spironolactone) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Alcohol,Ramipril,Moderate,Combining ACE inhibitors (Alcohol) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Grapefruit Juice,Ramipril,Moderate,Combining ACE inhibitors (Grapefruit Juice) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Nitroglycerin,Ramipril,Moderate,Combining ACE inhibitors (Nitroglycerin) or ARBs with potassium-sparing diuretics increases the risk of hyperkalemia. Monitor serum potassium levels.
+Amlodipine,Atorvastatin,Moderate,"Calcium channel blockers can increase plasma concentrations of statin (Atorvastatin)s, elevating the risk of statin (Atorvastatin)-induced myopathy and rhabdomyolysis."
+Atorvastatin,Diltiazem,Moderate,"Calcium channel blockers can increase plasma concentrations of statin (Atorvastatin)s, elevating the risk of statin (Atorvastatin)-induced myopathy and rhabdomyolysis."
+Atorvastatin,Verapamil,Moderate,"Calcium channel blockers can increase plasma concentrations of statin (Atorvastatin)s, elevating the risk of statin (Atorvastatin)-induced myopathy and rhabdomyolysis."
+Atorvastatin,Nifedipine,Moderate,"Calcium channel blockers can increase plasma concentrations of statin (Atorvastatin)s, elevating the risk of statin (Atorvastatin)-induced myopathy and rhabdomyolysis."
+Diltiazem,Simvastatin,Moderate,"Calcium channel blockers can increase plasma concentrations of statin (Simvastatin)s, elevating the risk of statin (Simvastatin)-induced myopathy and rhabdomyolysis."
+Simvastatin,Verapamil,Moderate,"Calcium channel blockers can increase plasma concentrations of statin (Simvastatin)s, elevating the risk of statin (Simvastatin)-induced myopathy and rhabdomyolysis."
+Nifedipine,Simvastatin,Moderate,"Calcium channel blockers can increase plasma concentrations of statin (Simvastatin)s, elevating the risk of statin (Simvastatin)-induced myopathy and rhabdomyolysis."
+Amlodipine,Rosuvastatin,Moderate,"Calcium channel blockers can increase plasma concentrations of statin (Rosuvastatin)s, elevating the risk of statin (Rosuvastatin)-induced myopathy and rhabdomyolysis."
+Diltiazem,Rosuvastatin,Moderate,"Calcium channel blockers can increase plasma concentrations of statin (Rosuvastatin)s, elevating the risk of statin (Rosuvastatin)-induced myopathy and rhabdomyolysis."
+Rosuvastatin,Verapamil,Moderate,"Calcium channel blockers can increase plasma concentrations of statin (Rosuvastatin)s, elevating the risk of statin (Rosuvastatin)-induced myopathy and rhabdomyolysis."
+Nifedipine,Rosuvastatin,Moderate,"Calcium channel blockers can increase plasma concentrations of statin (Rosuvastatin)s, elevating the risk of statin (Rosuvastatin)-induced myopathy and rhabdomyolysis."
+Amlodipine,Pravastatin,Moderate,"Calcium channel blockers can increase plasma concentrations of statin (Pravastatin)s, elevating the risk of statin (Pravastatin)-induced myopathy and rhabdomyolysis."
+Diltiazem,Pravastatin,Moderate,"Calcium channel blockers can increase plasma concentrations of statin (Pravastatin)s, elevating the risk of statin (Pravastatin)-induced myopathy and rhabdomyolysis."
+Pravastatin,Verapamil,Moderate,"Calcium channel blockers can increase plasma concentrations of statin (Pravastatin)s, elevating the risk of statin (Pravastatin)-induced myopathy and rhabdomyolysis."
+Nifedipine,Pravastatin,Moderate,"Calcium channel blockers can increase plasma concentrations of statin (Pravastatin)s, elevating the risk of statin (Pravastatin)-induced myopathy and rhabdomyolysis."
+Amlodipine,Lovastatin,Moderate,"Calcium channel blockers can increase plasma concentrations of statin (Lovastatin)s, elevating the risk of statin (Lovastatin)-induced myopathy and rhabdomyolysis."
+Diltiazem,Lovastatin,Moderate,"Calcium channel blockers can increase plasma concentrations of statin (Lovastatin)s, elevating the risk of statin (Lovastatin)-induced myopathy and rhabdomyolysis."
+Lovastatin,Verapamil,Moderate,"Calcium channel blockers can increase plasma concentrations of statin (Lovastatin)s, elevating the risk of statin (Lovastatin)-induced myopathy and rhabdomyolysis."
+Lovastatin,Nifedipine,Moderate,"Calcium channel blockers can increase plasma concentrations of statin (Lovastatin)s, elevating the risk of statin (Lovastatin)-induced myopathy and rhabdomyolysis."
+Atorvastatin,Azithromycin,High,"Macrolide antibiotics are potent CYP3A4 inhibitors that significantly increase statin (Atorvastatin) exposure, leading to major risks of myopathy and rhabdomyolysis."
+Atorvastatin,Erythromycin,High,"Macrolide antibiotics are potent CYP3A4 inhibitors that significantly increase statin (Atorvastatin) exposure, leading to major risks of myopathy and rhabdomyolysis."
+Azithromycin,Simvastatin,High,"Macrolide antibiotics are potent CYP3A4 inhibitors that significantly increase statin (Simvastatin) exposure, leading to major risks of myopathy and rhabdomyolysis."
+Erythromycin,Simvastatin,High,"Macrolide antibiotics are potent CYP3A4 inhibitors that significantly increase statin (Simvastatin) exposure, leading to major risks of myopathy and rhabdomyolysis."
+Clarithromycin,Simvastatin,High,"Macrolide antibiotics are potent CYP3A4 inhibitors that significantly increase statin (Simvastatin) exposure, leading to major risks of myopathy and rhabdomyolysis."
+Azithromycin,Rosuvastatin,High,"Macrolide antibiotics are potent CYP3A4 inhibitors that significantly increase statin (Rosuvastatin) exposure, leading to major risks of myopathy and rhabdomyolysis."
+Erythromycin,Rosuvastatin,High,"Macrolide antibiotics are potent CYP3A4 inhibitors that significantly increase statin (Rosuvastatin) exposure, leading to major risks of myopathy and rhabdomyolysis."
+Clarithromycin,Rosuvastatin,High,"Macrolide antibiotics are potent CYP3A4 inhibitors that significantly increase statin (Rosuvastatin) exposure, leading to major risks of myopathy and rhabdomyolysis."
+Azithromycin,Pravastatin,High,"Macrolide antibiotics are potent CYP3A4 inhibitors that significantly increase statin (Pravastatin) exposure, leading to major risks of myopathy and rhabdomyolysis."
+Erythromycin,Pravastatin,High,"Macrolide antibiotics are potent CYP3A4 inhibitors that significantly increase statin (Pravastatin) exposure, leading to major risks of myopathy and rhabdomyolysis."
+Clarithromycin,Pravastatin,High,"Macrolide antibiotics are potent CYP3A4 inhibitors that significantly increase statin (Pravastatin) exposure, leading to major risks of myopathy and rhabdomyolysis."
+Azithromycin,Lovastatin,High,"Macrolide antibiotics are potent CYP3A4 inhibitors that significantly increase statin (Lovastatin) exposure, leading to major risks of myopathy and rhabdomyolysis."
+Erythromycin,Lovastatin,High,"Macrolide antibiotics are potent CYP3A4 inhibitors that significantly increase statin (Lovastatin) exposure, leading to major risks of myopathy and rhabdomyolysis."
+Clarithromycin,Lovastatin,High,"Macrolide antibiotics are potent CYP3A4 inhibitors that significantly increase statin (Lovastatin) exposure, leading to major risks of myopathy and rhabdomyolysis."
+Metoprolol,Paracetamol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Levothyroxine,Metoprolol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Albuterol,Metoprolol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Metoprolol,Tramadol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Metoprolol,Sertraline,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Fluoxetine,Metoprolol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Metoprolol,Spironolactone,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Alcohol,Metoprolol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Grapefruit Juice,Metoprolol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Metoprolol,Nitroglycerin,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Atenolol,Paracetamol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Atenolol,Levothyroxine,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Albuterol,Atenolol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Atenolol,Tramadol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Atenolol,Sertraline,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Atenolol,Fluoxetine,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Atenolol,Spironolactone,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Alcohol,Atenolol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Atenolol,Grapefruit Juice,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Atenolol,Nitroglycerin,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Paracetamol,Propranolol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Levothyroxine,Propranolol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Albuterol,Propranolol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Propranolol,Tramadol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Propranolol,Sertraline,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Fluoxetine,Propranolol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Propranolol,Spironolactone,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Alcohol,Propranolol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Grapefruit Juice,Propranolol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Nitroglycerin,Propranolol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Carvedilol,Paracetamol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Carvedilol,Levothyroxine,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Albuterol,Carvedilol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Carvedilol,Tramadol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Carvedilol,Sertraline,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Carvedilol,Fluoxetine,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Carvedilol,Spironolactone,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Alcohol,Carvedilol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Carvedilol,Grapefruit Juice,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Carvedilol,Nitroglycerin,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Bisoprolol,Paracetamol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Bisoprolol,Levothyroxine,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Albuterol,Bisoprolol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Bisoprolol,Tramadol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Bisoprolol,Sertraline,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Bisoprolol,Fluoxetine,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Bisoprolol,Spironolactone,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Alcohol,Bisoprolol,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Bisoprolol,Grapefruit Juice,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Bisoprolol,Nitroglycerin,Moderate,Beta-blockers can antagonize the bronchodilatory effects of beta-agonists like Albuterol and may precipitate severe bronchospasm in patients with asthma.
+Alprazolam,Paracetamol,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Alprazolam,Levothyroxine,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Albuterol,Alprazolam,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Alprazolam,Tramadol,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Alprazolam,Sertraline,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Alprazolam,Fluoxetine,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Alprazolam,Spironolactone,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Alcohol,Alprazolam,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Alprazolam,Grapefruit Juice,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Alprazolam,Nitroglycerin,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Clonazepam,Paracetamol,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Clonazepam,Levothyroxine,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Albuterol,Clonazepam,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Clonazepam,Tramadol,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Clonazepam,Sertraline,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Clonazepam,Fluoxetine,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Clonazepam,Spironolactone,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Alcohol,Clonazepam,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Clonazepam,Grapefruit Juice,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Clonazepam,Nitroglycerin,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Lorazepam,Paracetamol,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Levothyroxine,Lorazepam,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Albuterol,Lorazepam,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Lorazepam,Tramadol,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Lorazepam,Sertraline,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Fluoxetine,Lorazepam,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Lorazepam,Spironolactone,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Alcohol,Lorazepam,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Grapefruit Juice,Lorazepam,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Lorazepam,Nitroglycerin,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Diazepam,Paracetamol,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Diazepam,Levothyroxine,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Albuterol,Diazepam,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Diazepam,Tramadol,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Diazepam,Sertraline,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Diazepam,Fluoxetine,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Diazepam,Spironolactone,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Alcohol,Diazepam,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Diazepam,Grapefruit Juice,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Diazepam,Nitroglycerin,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Paracetamol,Temazepam,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Levothyroxine,Temazepam,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Albuterol,Temazepam,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Temazepam,Tramadol,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Sertraline,Temazepam,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Fluoxetine,Temazepam,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Spironolactone,Temazepam,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Alcohol,Temazepam,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Grapefruit Juice,Temazepam,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Nitroglycerin,Temazepam,High,"Concurrent use results in additive central nervous system depression, severe psychomotor impairment, respiratory depression, and risk of coma."
+Cetirizine,Paracetamol,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Cetirizine,Levothyroxine,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Albuterol,Cetirizine,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Cetirizine,Tramadol,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Cetirizine,Sertraline,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Cetirizine,Fluoxetine,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Cetirizine,Spironolactone,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Cetirizine,Grapefruit Juice,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Cetirizine,Nitroglycerin,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Loratadine,Paracetamol,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Levothyroxine,Loratadine,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Albuterol,Loratadine,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Loratadine,Tramadol,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Loratadine,Sertraline,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Fluoxetine,Loratadine,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Loratadine,Spironolactone,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Alcohol,Loratadine,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Grapefruit Juice,Loratadine,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Loratadine,Nitroglycerin,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Fexofenadine,Paracetamol,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Fexofenadine,Levothyroxine,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Albuterol,Fexofenadine,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Fexofenadine,Tramadol,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Fexofenadine,Sertraline,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Fexofenadine,Fluoxetine,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Fexofenadine,Spironolactone,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Alcohol,Fexofenadine,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Fexofenadine,Grapefruit Juice,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Fexofenadine,Nitroglycerin,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Diphenhydramine,Paracetamol,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Diphenhydramine,Levothyroxine,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Albuterol,Diphenhydramine,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Diphenhydramine,Tramadol,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Diphenhydramine,Sertraline,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Diphenhydramine,Fluoxetine,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Diphenhydramine,Spironolactone,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Alcohol,Diphenhydramine,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Diphenhydramine,Grapefruit Juice,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Diphenhydramine,Nitroglycerin,Low,"Concomitant use may enhance drowsiness, sedation, and psychomotor impairment. Caution is advised when driving."
+Naproxen,Prednisone,Moderate,"Concurrent administration increases the risk of gastrointestinal ulceration, irritation, and mucosal bleeding."
+Aspirin,Prednisone,Moderate,"Concurrent administration increases the risk of gastrointestinal ulceration, irritation, and mucosal bleeding."
+Celecoxib,Prednisone,Moderate,"Concurrent administration increases the risk of gastrointestinal ulceration, irritation, and mucosal bleeding."
+Diclofenac,Prednisone,Moderate,"Concurrent administration increases the risk of gastrointestinal ulceration, irritation, and mucosal bleeding."
+Dexamethasone,Ibuprofen,Moderate,"Concurrent administration increases the risk of gastrointestinal ulceration, irritation, and mucosal bleeding."
+Dexamethasone,Naproxen,Moderate,"Concurrent administration increases the risk of gastrointestinal ulceration, irritation, and mucosal bleeding."
+Aspirin,Dexamethasone,Moderate,"Concurrent administration increases the risk of gastrointestinal ulceration, irritation, and mucosal bleeding."
+Celecoxib,Dexamethasone,Moderate,"Concurrent administration increases the risk of gastrointestinal ulceration, irritation, and mucosal bleeding."
+Dexamethasone,Diclofenac,Moderate,"Concurrent administration increases the risk of gastrointestinal ulceration, irritation, and mucosal bleeding."
+Ibuprofen,Methylprednisolone,Moderate,"Concurrent administration increases the risk of gastrointestinal ulceration, irritation, and mucosal bleeding."
+Methylprednisolone,Naproxen,Moderate,"Concurrent administration increases the risk of gastrointestinal ulceration, irritation, and mucosal bleeding."
+Aspirin,Methylprednisolone,Moderate,"Concurrent administration increases the risk of gastrointestinal ulceration, irritation, and mucosal bleeding."
+Celecoxib,Methylprednisolone,Moderate,"Concurrent administration increases the risk of gastrointestinal ulceration, irritation, and mucosal bleeding."
+Diclofenac,Methylprednisolone,Moderate,"Concurrent administration increases the risk of gastrointestinal ulceration, irritation, and mucosal bleeding."
+Atenolol,Insulin,Moderate,Beta-blockers may mask key warning symptoms of hypoglycemia (such as tachycardia) and delay recovery from low blood sugar.
+Insulin,Propranolol,Moderate,Beta-blockers may mask key warning symptoms of hypoglycemia (such as tachycardia) and delay recovery from low blood sugar.
+Carvedilol,Insulin,Moderate,Beta-blockers may mask key warning symptoms of hypoglycemia (such as tachycardia) and delay recovery from low blood sugar.
+Bisoprolol,Insulin,Moderate,Beta-blockers may mask key warning symptoms of hypoglycemia (such as tachycardia) and delay recovery from low blood sugar.
+Metformin,Metoprolol,Moderate,Beta-blockers may mask key warning symptoms of hypoglycemia (such as tachycardia) and delay recovery from low blood sugar.
+Atenolol,Metformin,Moderate,Beta-blockers may mask key warning symptoms of hypoglycemia (such as tachycardia) and delay recovery from low blood sugar.
+Metformin,Propranolol,Moderate,Beta-blockers may mask key warning symptoms of hypoglycemia (such as tachycardia) and delay recovery from low blood sugar.
+Carvedilol,Metformin,Moderate,Beta-blockers may mask key warning symptoms of hypoglycemia (such as tachycardia) and delay recovery from low blood sugar.
+Bisoprolol,Metformin,Moderate,Beta-blockers may mask key warning symptoms of hypoglycemia (such as tachycardia) and delay recovery from low blood sugar.
+Glipizide,Metoprolol,Moderate,Beta-blockers may mask key warning symptoms of hypoglycemia (such as tachycardia) and delay recovery from low blood sugar.
+Atenolol,Glipizide,Moderate,Beta-blockers may mask key warning symptoms of hypoglycemia (such as tachycardia) and delay recovery from low blood sugar.
+Glipizide,Propranolol,Moderate,Beta-blockers may mask key warning symptoms of hypoglycemia (such as tachycardia) and delay recovery from low blood sugar.
+Carvedilol,Glipizide,Moderate,Beta-blockers may mask key warning symptoms of hypoglycemia (such as tachycardia) and delay recovery from low blood sugar.
+Bisoprolol,Glipizide,Moderate,Beta-blockers may mask key warning symptoms of hypoglycemia (such as tachycardia) and delay recovery from low blood sugar.
+Glyburide,Metoprolol,Moderate,Beta-blockers may mask key warning symptoms of hypoglycemia (such as tachycardia) and delay recovery from low blood sugar.
+Atenolol,Glyburide,Moderate,Beta-blockers may mask key warning symptoms of hypoglycemia (such as tachycardia) and delay recovery from low blood sugar.
+Glyburide,Propranolol,Moderate,Beta-blockers may mask key warning symptoms of hypoglycemia (such as tachycardia) and delay recovery from low blood sugar.
+Carvedilol,Glyburide,Moderate,Beta-blockers may mask key warning symptoms of hypoglycemia (such as tachycardia) and delay recovery from low blood sugar.
+Bisoprolol,Glyburide,Moderate,Beta-blockers may mask key warning symptoms of hypoglycemia (such as tachycardia) and delay recovery from low blood sugar.
+Metoprolol,Pioglitazone,Moderate,Beta-blockers may mask key warning symptoms of hypoglycemia (such as tachycardia) and delay recovery from low blood sugar.
+Atenolol,Pioglitazone,Moderate,Beta-blockers may mask key warning symptoms of hypoglycemia (such as tachycardia) and delay recovery from low blood sugar.
+Pioglitazone,Propranolol,Moderate,Beta-blockers may mask key warning symptoms of hypoglycemia (such as tachycardia) and delay recovery from low blood sugar.
+Carvedilol,Pioglitazone,Moderate,Beta-blockers may mask key warning symptoms of hypoglycemia (such as tachycardia) and delay recovery from low blood sugar.
+Bisoprolol,Pioglitazone,Moderate,Beta-blockers may mask key warning symptoms of hypoglycemia (such as tachycardia) and delay recovery from low blood sugar.
+Ciprofloxacin,Prednisone,Moderate,"Co-administration increases the risk of tendonitis and tendon rupture, particularly in patients over 60 or those on long-term steroid therapy."
+Ciprofloxacin,Dexamethasone,Moderate,"Co-administration increases the risk of tendonitis and tendon rupture, particularly in patients over 60 or those on long-term steroid therapy."
+Ciprofloxacin,Methylprednisolone,Moderate,"Co-administration increases the risk of tendonitis and tendon rupture, particularly in patients over 60 or those on long-term steroid therapy."
+Levofloxacin,Prednisone,Moderate,"Co-administration increases the risk of tendonitis and tendon rupture, particularly in patients over 60 or those on long-term steroid therapy."
+Dexamethasone,Levofloxacin,Moderate,"Co-administration increases the risk of tendonitis and tendon rupture, particularly in patients over 60 or those on long-term steroid therapy."
+Levofloxacin,Methylprednisolone,Moderate,"Co-administration increases the risk of tendonitis and tendon rupture, particularly in patients over 60 or those on long-term steroid therapy."
+Moxifloxacin,Prednisone,Moderate,"Co-administration increases the risk of tendonitis and tendon rupture, particularly in patients over 60 or those on long-term steroid therapy."
+Dexamethasone,Moxifloxacin,Moderate,"Co-administration increases the risk of tendonitis and tendon rupture, particularly in patients over 60 or those on long-term steroid therapy."
+Methylprednisolone,Moxifloxacin,Moderate,"Co-administration increases the risk of tendonitis and tendon rupture, particularly in patients over 60 or those on long-term steroid therapy."
+Amlodipine,Ciprofloxacin,Moderate,Fluoroquinolones may prolong the QT interval and increase the risk of ventricular arrhythmias when combined with certain calcium channel blocker (Amlodipine)s.
+Ciprofloxacin,Diltiazem,Moderate,Fluoroquinolones may prolong the QT interval and increase the risk of ventricular arrhythmias when combined with certain calcium channel blocker (Diltiazem)s.
+Ciprofloxacin,Verapamil,Moderate,Fluoroquinolones may prolong the QT interval and increase the risk of ventricular arrhythmias when combined with certain calcium channel blocker (Verapamil)s.
+Ciprofloxacin,Nifedipine,Moderate,Fluoroquinolones may prolong the QT interval and increase the risk of ventricular arrhythmias when combined with certain calcium channel blocker (Nifedipine)s.
+Amlodipine,Levofloxacin,Moderate,Fluoroquinolones may prolong the QT interval and increase the risk of ventricular arrhythmias when combined with certain calcium channel blocker (Amlodipine)s.
+Diltiazem,Levofloxacin,Moderate,Fluoroquinolones may prolong the QT interval and increase the risk of ventricular arrhythmias when combined with certain calcium channel blocker (Diltiazem)s.
+Levofloxacin,Verapamil,Moderate,Fluoroquinolones may prolong the QT interval and increase the risk of ventricular arrhythmias when combined with certain calcium channel blocker (Verapamil)s.
+Levofloxacin,Nifedipine,Moderate,Fluoroquinolones may prolong the QT interval and increase the risk of ventricular arrhythmias when combined with certain calcium channel blocker (Nifedipine)s.
+Amlodipine,Moxifloxacin,Moderate,Fluoroquinolones may prolong the QT interval and increase the risk of ventricular arrhythmias when combined with certain calcium channel blocker (Amlodipine)s.
+Diltiazem,Moxifloxacin,Moderate,Fluoroquinolones may prolong the QT interval and increase the risk of ventricular arrhythmias when combined with certain calcium channel blocker (Diltiazem)s.
+Moxifloxacin,Verapamil,Moderate,Fluoroquinolones may prolong the QT interval and increase the risk of ventricular arrhythmias when combined with certain calcium channel blocker (Verapamil)s.
+Moxifloxacin,Nifedipine,Moderate,Fluoroquinolones may prolong the QT interval and increase the risk of ventricular arrhythmias when combined with certain calcium channel blocker (Nifedipine)s.
+Omeprazole,Warfarin,Moderate,"PPIs (especially Omeprazole) inhibit CYP2C19, reducing the bioactivation and antiplatelet efficacy of Clopidogrel."
+Apixaban,Omeprazole,Moderate,"PPIs (especially Omeprazole) inhibit CYP2C19, reducing the bioactivation and antiplatelet efficacy of Clopidogrel."
+Omeprazole,Rivaroxaban,Moderate,"PPIs (especially Omeprazole) inhibit CYP2C19, reducing the bioactivation and antiplatelet efficacy of Clopidogrel."
+Heparin,Omeprazole,Moderate,"PPIs (especially Omeprazole) inhibit CYP2C19, reducing the bioactivation and antiplatelet efficacy of Clopidogrel."
+Pantoprazole,Warfarin,Moderate,"PPIs (especially Omeprazole) inhibit CYP2C19, reducing the bioactivation and antiplatelet efficacy of Clopidogrel."
+Clopidogrel,Pantoprazole,Moderate,"PPIs (especially Omeprazole) inhibit CYP2C19, reducing the bioactivation and antiplatelet efficacy of Clopidogrel."
+Apixaban,Pantoprazole,Moderate,"PPIs (especially Omeprazole) inhibit CYP2C19, reducing the bioactivation and antiplatelet efficacy of Clopidogrel."
+Pantoprazole,Rivaroxaban,Moderate,"PPIs (especially Omeprazole) inhibit CYP2C19, reducing the bioactivation and antiplatelet efficacy of Clopidogrel."
+Heparin,Pantoprazole,Moderate,"PPIs (especially Omeprazole) inhibit CYP2C19, reducing the bioactivation and antiplatelet efficacy of Clopidogrel."
+Esomeprazole,Warfarin,Moderate,"PPIs (especially Omeprazole) inhibit CYP2C19, reducing the bioactivation and antiplatelet efficacy of Clopidogrel."
+Clopidogrel,Esomeprazole,Moderate,"PPIs (especially Omeprazole) inhibit CYP2C19, reducing the bioactivation and antiplatelet efficacy of Clopidogrel."
+Apixaban,Esomeprazole,Moderate,"PPIs (especially Omeprazole) inhibit CYP2C19, reducing the bioactivation and antiplatelet efficacy of Clopidogrel."
+Esomeprazole,Rivaroxaban,Moderate,"PPIs (especially Omeprazole) inhibit CYP2C19, reducing the bioactivation and antiplatelet efficacy of Clopidogrel."
+Esomeprazole,Heparin,Moderate,"PPIs (especially Omeprazole) inhibit CYP2C19, reducing the bioactivation and antiplatelet efficacy of Clopidogrel."
+Lansoprazole,Warfarin,Moderate,"PPIs (especially Omeprazole) inhibit CYP2C19, reducing the bioactivation and antiplatelet efficacy of Clopidogrel."
+Clopidogrel,Lansoprazole,Moderate,"PPIs (especially Omeprazole) inhibit CYP2C19, reducing the bioactivation and antiplatelet efficacy of Clopidogrel."
+Apixaban,Lansoprazole,Moderate,"PPIs (especially Omeprazole) inhibit CYP2C19, reducing the bioactivation and antiplatelet efficacy of Clopidogrel."
+Lansoprazole,Rivaroxaban,Moderate,"PPIs (especially Omeprazole) inhibit CYP2C19, reducing the bioactivation and antiplatelet efficacy of Clopidogrel."
+Heparin,Lansoprazole,Moderate,"PPIs (especially Omeprazole) inhibit CYP2C19, reducing the bioactivation and antiplatelet efficacy of Clopidogrel."
+Levothyroxine,Paracetamol,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Albuterol,Paracetamol,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Paracetamol,Tramadol,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Paracetamol,Sertraline,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Fluoxetine,Paracetamol,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Paracetamol,Spironolactone,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Grapefruit Juice,Paracetamol,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Nitroglycerin,Paracetamol,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Albuterol,Levothyroxine,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Levothyroxine,Tramadol,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Levothyroxine,Sertraline,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Fluoxetine,Levothyroxine,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Levothyroxine,Spironolactone,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Alcohol,Levothyroxine,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Grapefruit Juice,Levothyroxine,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Levothyroxine,Nitroglycerin,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Albuterol,Tramadol,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Albuterol,Sertraline,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Albuterol,Fluoxetine,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Albuterol,Spironolactone,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Albuterol,Alcohol,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Albuterol,Grapefruit Juice,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Albuterol,Nitroglycerin,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Spironolactone,Tramadol,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Alcohol,Tramadol,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Grapefruit Juice,Tramadol,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Nitroglycerin,Tramadol,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Fluoxetine,Sertraline,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Sertraline,Spironolactone,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Alcohol,Sertraline,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Grapefruit Juice,Sertraline,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Nitroglycerin,Sertraline,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Fluoxetine,Spironolactone,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Alcohol,Fluoxetine,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Fluoxetine,Grapefruit Juice,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Fluoxetine,Nitroglycerin,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Alcohol,Spironolactone,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Grapefruit Juice,Spironolactone,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Nitroglycerin,Spironolactone,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Alcohol,Grapefruit Juice,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Alcohol,Nitroglycerin,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Grapefruit Juice,Nitroglycerin,High,"Combining serotonergic drugs (like SSRIs) with Tramadol increases the risk of serotonin syndrome, a potentially life-threatening condition."
+Sertraline,Warfarin,Moderate,Co-administration of Sertraline and Warfarin may alter anticoagulant responses; monitor INR parameters.
+Fluoxetine,Warfarin,Moderate,Co-administration of Fluoxetine and Warfarin may alter anticoagulant responses; monitor INR parameters.
+Spironolactone,Warfarin,Moderate,Co-administration of Spironolactone and Warfarin may alter anticoagulant responses; monitor INR parameters.
+Albuterol,Warfarin,Moderate,Co-administration of Albuterol and Warfarin may alter anticoagulant responses; monitor INR parameters.
+Tramadol,Warfarin,Moderate,Co-administration of Tramadol and Warfarin may alter anticoagulant responses; monitor INR parameters.
