@@ -67,14 +67,22 @@ class LLMService:
             import google.generativeai as genai
             genai.configure(api_key=api_key)
             
-            # Using gemini-1.5-flash for fast and cost-effective clinical outputs
-            model = genai.GenerativeModel(
-                model_name='gemini-1.5-flash',
-                system_instruction=system_rules
-            )
+            # Try models in order of preference
+            models_to_try = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash']
             
-            response = model.generate_content(prompt)
-            return response.text
+            for model_name in models_to_try:
+                try:
+                    # Using the latest Gemini models for fast and cost-effective clinical outputs
+                    model = genai.GenerativeModel(
+                        model_name=model_name,
+                        system_instruction=system_rules
+                    )
+                    response = model.generate_content(prompt)
+                    return response.text
+                except Exception as model_err:
+                    print(f"Gemini API model {model_name} invocation failed: {model_err}.")
+            
+            raise RuntimeError("All configured Gemini models failed to generate content.")
             
         except Exception as api_err:
             print(f"Gemini API invocation failed: {api_err}. Reverting to offline mockup.")

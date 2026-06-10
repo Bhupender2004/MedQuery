@@ -71,30 +71,30 @@ class RetrievalService:
         if not results:
             query_clean = query.lower()
 
-        if 'aspirin' in query_clean or 'warfarin' in query_clean:
-            results.append({
-                'text': "Clinical Guideline Code A-12: Co-administering Aspirin (antiplatelet) and Warfarin "
-                        "(oral anticoagulant) significantly elevates hemorrhage hazards. This combination "
-                        "requires close monitoring of coagulation profiles (INR indices) and hematocrit indices.",
-                'metadata': {'source': 'cardiovascular_safety_standards.pdf', 'page': 45},
-                'score': 0.91
-            })
-            results.append({
-                'text': "Alternative guidelines for antiplatelets: In patients needing dual therapy, "
-                        "proton pump inhibitors (PPIs) may be considered to reduce gastrointestinal bleed risks "
-                        "associated with concurrent warfarin-aspirin therapies.",
-                'metadata': {'source': 'clinical_guidelines_cardio.pdf', 'page': 12},
-                'score': 0.78
-            })
+            if 'aspirin' in query_clean or 'warfarin' in query_clean:
+                results.append({
+                    'text': "Clinical Guideline Code A-12: Co-administering Aspirin (antiplatelet) and Warfarin "
+                            "(oral anticoagulant) significantly elevates hemorrhage hazards. This combination "
+                            "requires close monitoring of coagulation profiles (INR indices) and hematocrit indices.",
+                    'metadata': {'source': 'cardiovascular_safety_standards.pdf', 'page': 45},
+                    'score': 0.91
+                })
+                results.append({
+                    'text': "Alternative guidelines for antiplatelets: In patients needing dual therapy, "
+                            "proton pump inhibitors (PPIs) may be considered to reduce gastrointestinal bleed risks "
+                            "associated with concurrent warfarin-aspirin therapies.",
+                    'metadata': {'source': 'clinical_guidelines_cardio.pdf', 'page': 12},
+                    'score': 0.78
+                })
 
-        if 'lisinopril' in query_clean or 'ibuprofen' in query_clean:
-            results.append({
-                'text': "ACE Inhibitor Interaction Alert: NSAIDs like Ibuprofen may mitigate "
-                        "the blood-pressure lowering properties of Lisinopril. Furthermore, combining "
-                        "them can exacerbate renal impairment risks and induce acute kidney injury.",
-                'metadata': {'source': 'renal_toxicology_handbook.pdf', 'page': 9},
-                'score': 0.88
-            })
+            if 'lisinopril' in query_clean or 'ibuprofen' in query_clean:
+                results.append({
+                    'text': "ACE Inhibitor Interaction Alert: NSAIDs like Ibuprofen may mitigate "
+                            "the blood-pressure lowering properties of Lisinopril. Furthermore, combining "
+                            "them can exacerbate renal impairment risks and induce acute kidney injury.",
+                    'metadata': {'source': 'renal_toxicology_handbook.pdf', 'page': 9},
+                    'score': 0.88
+                })
 
         # General backup context if query targets other compounds
         if not results:

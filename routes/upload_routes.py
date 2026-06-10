@@ -30,6 +30,8 @@ def upload_file():
     except ValueError as val_err:
         return jsonify({'error': str(val_err)}), 400
     except Exception as err:
+        import traceback
+        traceback.print_exc()
         return jsonify({
             'error': 'An internal exception occurred handling uploaded content.',
             'message': str(err)
