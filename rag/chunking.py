@@ -42,7 +42,8 @@ class Chunker:
             # Look for clean text boundary (like space or sentence end)
             if end_pos < text_len:
                 # Seek backwards looking for space inside a 100-character margin
-                boundary_idx = text.rfind(' ', end_pos - 100, end_pos)
+                search_start = max(start_pos, end_pos - 100)
+                boundary_idx = text.rfind(' ', search_start, end_pos)
                 if boundary_idx != -1:
                     end_pos = boundary_idx
 
@@ -52,6 +53,9 @@ class Chunker:
                     'text': segment_text,
                     'page': 1  # Default fallback page tracker
                 })
+
+            if end_pos >= text_len:
+                break
 
             start_pos = end_pos - chunk_overlap
             # Prevent infinite loops in sliding window indices
