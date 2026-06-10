@@ -36,6 +36,7 @@ def create_app(test_config=None):
     os.makedirs(app.config.get('CHROMA_PERSIST_DIR', 'chroma_db'), exist_ok=True)
 
     # 3. Database Initialization
+    import models
     from database.connection import init_db
     init_db(app)
 

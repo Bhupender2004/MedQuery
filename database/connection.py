@@ -30,7 +30,8 @@ def create_app_engine():
     Tries to connect to MySQL. If unreachable, falls back to SQLite.
     """
     mysql_url = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-    sqlite_url = "sqlite:///medquery.db"
+    sqlite_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "medquery.db"))
+    sqlite_url = f"sqlite:///{sqlite_path.replace(os.sep, '/')}"
     
     try:
         # Create MySQL engine with a low timeout to prevent blocking startup

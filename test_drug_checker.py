@@ -32,12 +32,12 @@ def execute_clinical_tests():
             description = report.get('description', '')
             
             # Print warnings and severity colors
-            print("  Status:   ⚠️  INTERACTION WARNING FLAGGED")
+            print("  Status:   [WARNING] INTERACTION WARNING FLAGGED")
             print(f"  Severity: [{severity}]")
             print(f"  Notes:    {description}")
         else:
             message = report.get('message', 'No interaction logs found.')
-            print("  Status:   ✅  NO REGISTERED HAZARD FOUND")
+            print("  Status:   [SAFE] NO REGISTERED HAZARD FOUND")
             print(f"  Notes:    {message}")
 
     print("\n" + "=" * 60 + "\n")
