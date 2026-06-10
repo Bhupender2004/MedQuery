@@ -1,5 +1,7 @@
 import pytest
 import json
+import os
+import shutil
 from io import BytesIO
 from app import create_app
 from database.connection import db
@@ -22,10 +24,7 @@ def client():
         db.drop_all()
         
     if os.path.exists('./test_uploads_api'):
-        import shutil, os
         shutil.rmtree('./test_uploads_api')
-
-import os
 
 def test_page_renders(client):
     # Test HTML view routes

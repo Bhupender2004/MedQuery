@@ -46,7 +46,7 @@ class DrugChecker:
         if 'aspirin' in query_clean and 'warfarin' in query_clean:
             return {
                 'has_warnings': True,
-                'severity': 'major',
+                'severity': 'High',
                 'description': "Concomitant use of Aspirin and Warfarin increases bleeding risks due to "
                                "additive antiplatelet and anticoagulant pharmacological actions."
             }
@@ -55,7 +55,7 @@ class DrugChecker:
         if 'ibuprofen' in query_clean and 'lisinopril' in query_clean:
             return {
                 'has_warnings': True,
-                'severity': 'moderate',
+                'severity': 'Moderate',
                 'description': "NSAIDs like Ibuprofen reduce renal perfusion and may diminish the therapeutic "
                                "anti-hypertensive efficacy of ACE inhibitors such as Lisinopril."
             }

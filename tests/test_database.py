@@ -27,9 +27,10 @@ def session(app):
     transaction = connection.begin()
     
     # Create local sessionmaker
-    options = dict(bind=connection, binds={})
-    session = db.create_scoped_session(options=options)
+    from sqlalchemy.orm import scoped_session, sessionmaker
+    session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=connection))
     
+    original_session = db.session
     db.session = session
     
     yield session
@@ -37,6 +38,7 @@ def session(app):
     transaction.rollback()
     connection.close()
     session.remove()
+    db.session = original_session
 
 def test_document_crud(session):
     doc = Document(

@@ -65,7 +65,7 @@ def test_drug_checker_rules_engine(app):
         # Test fallback hardcoded scanning
         report2 = DrugChecker.analyze_query("Can I take ibuprofen with lisinopril?")
         assert report2['has_warnings'] is True
-        assert report2['severity'] == "moderate"
+        assert report2['severity'] == "Moderate"
         assert "renal" in report2['description']
         
         # Test unrelated queries

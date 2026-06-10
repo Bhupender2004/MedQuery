@@ -54,6 +54,19 @@ class ChatService:
             for chunk in chunks
         ]
 
+        # Map drug interaction severity ('Low', 'Moderate', 'High') to query log severity_level ('minor', 'moderate', 'major')
+        severity_mapping = {
+            'Low': 'minor',
+            'low': 'minor',
+            'Moderate': 'moderate',
+            'moderate': 'moderate',
+            'High': 'major',
+            'high': 'major',
+            'major': 'major',
+            'minor': 'minor'
+        }
+        severity_level = severity_mapping.get(severity, 'none')
+
         # 5. Persistent SQL Logging
         log_entry = QueryLog(
             session_id=session_id,
@@ -61,7 +74,7 @@ class ChatService:
             ai_response=ai_response,
             citations=json.dumps(citations_data),
             has_interaction_warnings=has_warnings,
-            severity_level=severity
+            severity_level=severity_level
         )
 
         try:

@@ -19,10 +19,15 @@ def run_import():
         print(f"Error: Target dataset not found: {csv_file}")
         return
 
-    # Verify connectivity before execution
-    if not test_db_connection():
-        print("Error: Could not reach MySQL. Aborting import operations.")
-        return
+    # Bootstrap Flask App context to initialize database tables
+    from app import create_app
+    app = create_app()
+
+    with app.app_context():
+        # Verify connectivity before execution
+        if not test_db_connection():
+            print("Error: Could not reach active database. Aborting import operations.")
+            return
 
     print(f"Reading dataset: '{csv_file}'...")
     try:
