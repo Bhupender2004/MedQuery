@@ -24,13 +24,38 @@ DB_PASSWORD = os.getenv("DB_PASSWORD", "password")
 # Construct the standard MySQL Connection string
 DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
-# 1. Create Core SQLAlchemy Engine
-engine = create_engine(
-    DATABASE_URL,
-    pool_pre_ping=True,      # Checks connection health before queries
-    pool_recycle=3600,       # Recycles connections every hour
-    echo=False               # Set to True for SQL query debugging
-)
+# 1. Create Core SQLAlchemy Engine with SQLite fallback
+def create_app_engine():
+    """
+    Tries to connect to MySQL. If unreachable, falls back to SQLite.
+    """
+    mysql_url = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+    sqlite_url = "sqlite:///medquery.db"
+    
+    try:
+        # Create MySQL engine with a low timeout to prevent blocking startup
+        mysql_engine = create_engine(
+            mysql_url,
+            pool_pre_ping=True,      # Checks connection health before queries
+            pool_recycle=3600,       # Recycles connections every hour
+            echo=False,
+            connect_args={"connect_timeout": 2}
+        )
+        # Check connection
+        with mysql_engine.connect() as conn:
+            from sqlalchemy import text
+            conn.execute(text("SELECT 1"))
+        print(f"Database connection test: SUCCESS (MySQL)")
+        return mysql_engine, mysql_url
+    except Exception as err:
+        print(f"Warning: MySQL connection failed ({err}). Falling back to SQLite.")
+        sqlite_engine = create_engine(
+            sqlite_url,
+            echo=False
+        )
+        return sqlite_engine, sqlite_url
+
+engine, DATABASE_URL = create_app_engine()
 
 # 2. Configure Scoped Session Factory
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -51,7 +76,7 @@ def init_db(app):
     
     with app.app_context():
         try:
-            # Create MySQL tables using Flask context as backup
+            # Create tables using Flask context
             db.create_all()
             print("MedQuery: Flask-SQLAlchemy database tables verified.")
         except Exception as err:
@@ -64,9 +89,8 @@ def test_db_connection():
     Returns:
         bool: True if connection was successful, False otherwise.
     """
-    print(f"Testing connection to MySQL Database: '{DB_NAME}' at {DB_HOST}:{DB_PORT}...")
+    print(f"Testing database connection using active engine...")
     try:
-        # Acquire a connection and run simple SELECT 1
         with engine.connect() as conn:
             from sqlalchemy import text
             conn.execute(text("SELECT 1"))
@@ -75,3 +99,4 @@ def test_db_connection():
     except Exception as err:
         print(f"Database connection test: FAILED\nReason: {err}")
         return False
+

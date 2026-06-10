@@ -24,18 +24,25 @@ CREATE TABLE IF NOT EXISTS drug_interactions (
     INDEX idx_drug_b (drug_b)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 2. Table for tracking ingested medical reference documents
+-- 2. Table for tracking medical documents uploads & vector ingestion states
 CREATE TABLE IF NOT EXISTS documents (
     id INT AUTO_INCREMENT PRIMARY KEY,
     filename VARCHAR(255) NOT NULL,
-    file_type VARCHAR(10) NOT NULL, -- 'pdf', 'txt', 'csv'
-    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    filepath VARCHAR(512) NOT NULL,
+    file_size INT NOT NULL,
+    status VARCHAR(50) DEFAULT 'pending', -- 'pending', 'processing', 'completed', 'failed'
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 3. Table for logged user queries and AI answers
+-- 3. Table for logged user queries, chat histories, citations, and interaction warning tags
 CREATE TABLE IF NOT EXISTS queries (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    question TEXT NOT NULL,
-    answer TEXT NOT NULL,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    session_id VARCHAR(100),
+    user_query TEXT NOT NULL,
+    ai_response TEXT NOT NULL,
+    citations TEXT, -- JSON array of source documents or paragraphs
+    has_interaction_warnings BOOLEAN DEFAULT FALSE,
+    severity_level VARCHAR(50) DEFAULT 'none', -- 'none', 'minor', 'moderate', 'major'
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

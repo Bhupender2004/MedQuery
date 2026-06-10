@@ -26,14 +26,50 @@ class RetrievalService:
         """
         print(f"Retrieval Service: searching query vectors for: '{query}'")
 
-        # In production integration:
-        # 1. Embed query via EmbeddingService.embed_texts([query])[0]
-        # 2. Connect to chromadb client.
-        # 3. Run query on collection.
-        
-        # Smart keyword matching fallbacks for testing drug-drug interaction outputs:
-        query_clean = query.lower()
         results = []
+        
+        # 1. Attempt ChromaDB semantic search
+        try:
+            import os
+            from flask import current_app
+            from rag.embeddings import EmbeddingService
+            import chromadb
+            
+            try:
+                persist_dir = current_app.config.get('CHROMA_PERSIST_DIR', 'chroma_db')
+            except RuntimeError:
+                persist_dir = os.getenv('CHROMA_PERSIST_DIR', 'chroma_db')
+                
+            query_embedding = EmbeddingService.embed_texts([query])[0]
+            
+            chroma_client = chromadb.PersistentClient(path=persist_dir)
+            collection = chroma_client.get_or_create_collection(name="medical_documents")
+            
+            query_results = collection.query(
+                query_embeddings=[query_embedding],
+                n_results=limit
+            )
+            
+            if query_results and query_results.get('documents') and query_results['documents'][0]:
+                documents = query_results['documents'][0]
+                metadatas = query_results['metadatas'][0]
+                distances = query_results['distances'][0] if 'distances' in query_results else [0.5] * len(documents)
+                
+                for doc, meta, dist in zip(documents, metadatas, distances):
+                    # Convert distance to similarity score
+                    score = round(1.0 - min(float(dist), 1.0), 2)
+                    results.append({
+                        'text': doc,
+                        'metadata': meta,
+                        'score': score
+                    })
+                print(f"ChromaDB: Successfully retrieved {len(results)} chunks.")
+        except Exception as chroma_err:
+            print(f"Warning: ChromaDB query bypassed: {chroma_err}")
+
+        # 2. Smart keyword matching fallbacks for testing drug-drug interaction outputs:
+        if not results:
+            query_clean = query.lower()
 
         if 'aspirin' in query_clean or 'warfarin' in query_clean:
             results.append({

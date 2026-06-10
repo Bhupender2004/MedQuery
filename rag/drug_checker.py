@@ -36,9 +36,7 @@ class DrugChecker:
                     return {
                         'has_warnings': True,
                         'severity': rule.severity,
-                        'description': f"Co-administration of {rule.drug_a} and {rule.drug_b} "
-                                       f"triggers a warning: {rule.mechanism}. "
-                                       f"Recommendation: {rule.recommendation}"
+                        'description': rule.description
                     }
         except Exception as db_err:
             print(f"Warning: Local SQL drug catalog checks bypassed: {db_err}")

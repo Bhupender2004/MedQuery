@@ -15,8 +15,14 @@ class Document(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     filename = db.Column(db.String(255), nullable=False)
-    file_type = db.Column(db.String(10), nullable=False) # 'pdf', 'txt', 'csv'
-    uploaded_at = db.Column(db.DateTime, default=datetime.utcnow)
+    filepath = db.Column(db.String(512), nullable=False)
+    file_size = db.Column(db.Integer, nullable=False)
+    
+    # Status flags: 'pending', 'processing', 'completed', 'failed'
+    status = db.Column(db.String(50), default='pending', nullable=False)
+    
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     def to_dict(self):
         """
@@ -25,6 +31,9 @@ class Document(db.Model):
         return {
             'id': self.id,
             'filename': self.filename,
-            'file_type': self.file_type,
-            'uploaded_at': self.uploaded_at.isoformat() if self.uploaded_at else None
+            'filepath': self.filepath,
+            'file_size': self.file_size,
+            'status': self.status,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'updated_at': self.updated_at.isoformat() if self.updated_at else None
         }

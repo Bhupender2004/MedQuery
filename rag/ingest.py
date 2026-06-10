@@ -66,10 +66,26 @@ class IngestionService:
             embeddings_list = EmbeddingService.embed_texts(texts_list)
 
             # 4. ChromaDB insertion
-            # Safe call to Chroma client fallback setups
-            # (Note: In future business logic implementation, this connects to chromadb library)
-            print(f"Successfully processed {len(chunks)} text chunks for: {filename}.")
-            print(f"Generated {len(embeddings_list)} embedding lists of dimension size {len(embeddings_list[0]) if embeddings_list else 0}.")
+            try:
+                import chromadb
+                from flask import current_app
+                persist_dir = current_app.config.get('CHROMA_PERSIST_DIR', 'chroma_db')
+                
+                chroma_client = chromadb.PersistentClient(path=persist_dir)
+                collection = chroma_client.get_or_create_collection(name="medical_documents")
+                
+                ids = [f"doc_{document_id}_chunk_{i}" for i in range(len(chunks))]
+                metadatas = [chunk['metadata'] for chunk in chunks]
+                
+                collection.add(
+                    ids=ids,
+                    embeddings=embeddings_list,
+                    metadatas=metadatas,
+                    documents=texts_list
+                )
+                print(f"ChromaDB: Successfully inserted {len(chunks)} text chunks for: {filename}.")
+            except Exception as chroma_err:
+                print(f"Warning: Failed to save vectors to ChromaDB: {chroma_err}")
 
             # 5. Database Status update
             doc_record = Document.query.get(document_id)
