@@ -74,20 +74,27 @@ def init_db(app):
     """
     Integrates database session bindings with the Flask app context.
     """
-    app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    db.init_app(app)
-    migrate.init_app(app, db)
-    
-    # Only run db.create_all() in testing mode to support in-memory SQLite db tests.
-    # In development/production, migrations are used to manage schema.
     if app.config.get('TESTING'):
+        # Keep the testing database URI (like sqlite:///:memory:)
+        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+        db.init_app(app)
+        migrate.init_app(app, db)
         with app.app_context():
+            # Rebind SessionLocal to use the test database engine
+            global SessionLocal
+            SessionLocal.configure(bind=db.engine)
+            
             try:
                 db.create_all()
                 print("MedQuery: Flask-SQLAlchemy database tables verified for testing.")
             except Exception as err:
                 print(f"MedQuery: DB tables registration skipped/deferred: {err}")
+    else:
+        # Override with our detected database (MySQL / SQLite fallback)
+        app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
+        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+        db.init_app(app)
+        migrate.init_app(app, db)
 
 def test_db_connection():
     """
