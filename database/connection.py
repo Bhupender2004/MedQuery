@@ -64,8 +64,11 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # 3. Base class for declarative models
 Base = declarative_base()
 
+from flask_migrate import Migrate
+
 # 4. Flask-SQLAlchemy Global Instantiation for Web Application integration
 db = SQLAlchemy()
+migrate = Migrate()
 
 def init_db(app):
     """
@@ -74,14 +77,17 @@ def init_db(app):
     app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
+    migrate.init_app(app, db)
     
-    with app.app_context():
-        try:
-            # Create tables using Flask context
-            db.create_all()
-            print("MedQuery: Flask-SQLAlchemy database tables verified.")
-        except Exception as err:
-            print(f"MedQuery: DB tables registration skipped/deferred: {err}")
+    # Only run db.create_all() in testing mode to support in-memory SQLite db tests.
+    # In development/production, migrations are used to manage schema.
+    if app.config.get('TESTING'):
+        with app.app_context():
+            try:
+                db.create_all()
+                print("MedQuery: Flask-SQLAlchemy database tables verified for testing.")
+            except Exception as err:
+                print(f"MedQuery: DB tables registration skipped/deferred: {err}")
 
 def test_db_connection():
     """
