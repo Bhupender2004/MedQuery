@@ -32,25 +32,29 @@ class IngestionService:
             filename = os.path.basename(filepath)
             file_ext = filename.rsplit('.', 1)[1].lower() if '.' in filename else ''
             
-            raw_text = ""
+            chunks = []
             if file_ext in ['txt', 'csv']:
+                raw_text = ""
                 with open(filepath, 'r', encoding='utf-8', errors='ignore') as file_stream:
                     raw_text = file_stream.read()
+                chunks = Chunker.split_text(raw_text, chunk_size=800, chunk_overlap=150)
             elif file_ext == 'pdf':
-                # Boilerplate fallback extraction mock
-                raw_text = f"Mocked extraction context for PDF reference: {filename}\n"
-                raw_text += "Lorem ipsum dolor sit amet, referencing drug warnings: "
-                raw_text += "Aspirin reacts with Warfarin increasing bleed hazards. "
-                raw_text += "Ibuprofen combined with Lisinopril reduces renal protection capabilities."
+                import pypdf
+                reader = pypdf.PdfReader(filepath)
+                for page_idx, page in enumerate(reader.pages):
+                    page_text = page.extract_text()
+                    if not page_text or not page_text.strip():
+                        continue
+                    page_chunks = Chunker.split_text(page_text, chunk_size=800, chunk_overlap=150)
+                    for chunk in page_chunks:
+                        chunk['page'] = page_idx + 1
+                        chunks.append(chunk)
             else:
                 raise ValueError(f"Extension format '.{file_ext}' is not supported in processing.")
 
-            # 2. Text Segment partitioning
-            chunks = Chunker.split_text(raw_text, chunk_size=800, chunk_overlap=150)
-            
             if not chunks:
                 print(f"Warning: No valid segments extracted from {filename}.")
-                chunks = [{"text": raw_text or "Empty file context", "metadata": {"source": filename, "page": 1}}]
+                chunks = [{"text": "Empty file context", "page": 1}]
 
             # Attach source context metadata to segments
             for index, chunk in enumerate(chunks):
