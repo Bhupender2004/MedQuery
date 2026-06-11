@@ -1,5 +1,6 @@
 import os
 import pytest
+from unittest.mock import patch, MagicMock
 from io import BytesIO
 from werkzeug.datastructures import FileStorage
 from app import create_app
@@ -77,3 +78,41 @@ def test_handle_upload_flow(app):
             assert status_info['status'] == "processing"
             
             mock_ingest.assert_called_once_with(filepath, doc.id)
+
+def test_handle_upload_async_trigger(app):
+    with app.app_context():
+        from flask import current_app
+        original_testing = current_app.config.get('TESTING')
+        current_app.config['TESTING'] = False
+        
+        try:
+            file_data = BytesIO(b"Some text info.")
+            file = FileStorage(
+                stream=file_data,
+                filename="async_test.txt",
+                content_type="text/plain"
+            )
+            
+            # Mock threading.Thread and ingest_file
+            with patch('threading.Thread') as mock_thread_class, \
+                 patch('services.upload_service.IngestionService.ingest_file') as mock_ingest:
+                
+                mock_thread_instance = MagicMock()
+                mock_thread_class.return_value = mock_thread_instance
+                
+                result = UploadService.handle_upload(file)
+                
+                # Verify that IngestionService.ingest_file WAS NOT called synchronously
+                mock_ingest.assert_not_called()
+                
+                # Verify that Thread was created and started
+                mock_thread_class.assert_called_once()
+                mock_thread_instance.start.assert_called_once()
+                
+                # Clean up local file created during test
+                filepath = os.path.join('./test_uploads', "async_test.txt")
+                if os.path.exists(filepath):
+                    os.remove(filepath)
+        finally:
+            current_app.config['TESTING'] = original_testing
+

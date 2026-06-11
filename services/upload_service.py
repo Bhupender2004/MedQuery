@@ -67,9 +67,27 @@ class UploadService:
             db.session.add(doc_entry)
             db.session.commit()
             
-            # Trigger RAG ingestion pipeline execution
-            # In production setups, this can run asynchronously (e.g. Celery / thread executors)
-            IngestionService.ingest_file(filepath, doc_entry.id)
+            # Trigger RAG ingestion pipeline execution asynchronously
+            from flask import current_app
+            if current_app.config.get('TESTING'):
+                # Synchronous run under testing conditions to prevent race conditions and test flakiness
+                IngestionService.ingest_file(filepath, doc_entry.id)
+            else:
+                import threading
+                app = current_app._get_current_object()
+                
+                def async_ingest_task(app_context, path, doc_id):
+                    with app_context.app_context():
+                        try:
+                            IngestionService.ingest_file(path, doc_id)
+                        except Exception as async_err:
+                            print(f"Background ingestion task failed for document {doc_id}: {async_err}")
+
+                threading.Thread(
+                    target=async_ingest_task,
+                    args=(app, filepath, doc_entry.id),
+                    daemon=True
+                ).start()
             
         except Exception as err:
             db.session.rollback()
