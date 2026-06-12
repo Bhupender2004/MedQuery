@@ -1,0 +1,14 @@
+Patient Name: Jane Doe
+Date: June 12, 2026
+Diagnosis: Type 2 Diabetes Mellitus & Hypertension
+
+Prescribed Medications:
+1. Metformin 1000mg twice daily with meals (Rx: 60 tablets, Refills: 3)
+2. Lisinopril 20mg once daily in the morning (Rx: 30 tablets, Refills: 5)
+
+Lab Results:
+- HbA1c: 7.8% (Target < 7.0%)
+- Blood Pressure: 142/88 mmHg
+- eGFR: 75 mL/min/1.73m2 (Normal kidney function)
+
+Instructions: Follow low-sodium and low-glycemic diet. Check blood glucose twice daily.

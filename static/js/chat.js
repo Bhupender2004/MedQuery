@@ -77,13 +77,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="warning-banner major" style="margin-bottom:1rem;">
                         <strong>⚠️ CRITICAL INTERACTION DETECTED (${data.severity.toUpperCase()}):</strong>
                         <p style="margin-top: 0.25rem; font-size: 0.9rem;">
-                           Database Rule Match: ${data.response}
+                           Database Rule Match: ${data.description || 'Known safety interaction risk flagged.'}
                         </p>
                     </div>
                 `;
-            } else {
-                renderHtml += `<div class="clinical-note">${data.response}</div>`;
             }
+
+            // Render the main clinical pharmacist response parsed from Markdown to beautiful HTML
+            const parsedMarkdown = typeof marked !== 'undefined' ? marked.parse(data.response) : data.response;
+            renderHtml += `<div class="clinical-note">${parsedMarkdown}</div>`;
 
             // Append retrieved citation documents lists
             if (data.citations && data.citations.length > 0) {

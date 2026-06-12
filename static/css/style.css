@@ -264,3 +264,48 @@ footer {
     background-color: var(--bg-secondary);
     margin-top: auto;
 }
+
+/* Rendered Markdown Typography & Structure */
+.clinical-note h3, .clinical-note h4 {
+    margin-top: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: var(--accent-teal);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.clinical-note h3:first-child, .clinical-note h4:first-child {
+    margin-top: 0;
+}
+
+.clinical-note p {
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+
+.clinical-note ul, .clinical-note ol {
+    margin-left: 1.25rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.clinical-note li {
+    margin-bottom: 0.35rem;
+}
+
+.clinical-note strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.clinical-note blockquote {
+    border-left: 3px solid var(--accent-teal);
+    padding-left: 0.75rem;
+    margin: 0.75rem 0;
+    color: var(--text-secondary);
+    background-color: var(--bg-primary);
+    border-radius: 4px;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+}

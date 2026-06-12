@@ -28,7 +28,47 @@ class RetrievalService:
 
         results = []
         
-        # 1. Attempt ChromaDB semantic search
+        # 1. Check if query relates to uploaded documents/prescriptions
+        try:
+            import os
+            from models.document_model import Document
+            from flask import has_app_context
+            
+            query_lower = query.lower()
+            doc_keywords = ['prescription', 'report', 'upload', 'document', 'file', 'summarize', 'summary', 'analyze', 'my health', 'my medical', 'my lab', 'pdf', 'txt', 'csv']
+            is_doc_query = any(k in query_lower for k in doc_keywords)
+            
+            if is_doc_query and has_app_context():
+                latest_docs = Document.query.filter(Document.status.in_(['completed', 'processing'])).order_by(Document.id.desc()).limit(2).all()
+                if latest_docs:
+                    print(f"Retrieval Service: Detected document query. Fetching content of latest {len(latest_docs)} documents.")
+                    for doc_record in latest_docs:
+                        if os.path.exists(doc_record.filepath):
+                            file_ext = doc_record.filename.rsplit('.', 1)[1].lower() if '.' in doc_record.filename else ''
+                            file_text = ""
+                            if file_ext in ['txt', 'csv']:
+                                with open(doc_record.filepath, 'r', encoding='utf-8', errors='ignore') as f:
+                                    file_text = f.read(8000)
+                            elif file_ext == 'pdf':
+                                import pypdf
+                                reader = pypdf.PdfReader(doc_record.filepath)
+                                pages_text = []
+                                for page in reader.pages[:10]:
+                                    txt = page.extract_text()
+                                    if txt:
+                                        pages_text.append(txt)
+                                file_text = "\n".join(pages_text)[:8000]
+                            
+                            if file_text.strip():
+                                results.append({
+                                    'text': f"[CONTENT OF UPLOADED DOCUMENT '{doc_record.filename}']:\n{file_text.strip()}",
+                                    'metadata': {'source': doc_record.filename, 'page': 1},
+                                    'score': 1.0
+                                })
+        except Exception as doc_err:
+            print(f"Warning: Failed to retrieve uploaded document text: {doc_err}")
+
+        # 2. Attempt ChromaDB semantic search
         try:
             import os
             from flask import current_app

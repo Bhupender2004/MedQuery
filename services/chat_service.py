@@ -89,6 +89,7 @@ class ChatService:
             'response': ai_response,
             'has_warnings': has_warnings,
             'severity': severity,
+            'description': drug_alert.get('description', ''),
             'citations': chunks
         }
 
