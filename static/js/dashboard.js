@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 queryLogsTableBody.innerHTML = '';
                 
                 const recentLogsList = metrics.recent_queries || [];
+                window.loadedLogs = recentLogsList; // Cache logs to avoid inline JS quote escaping issues
                 
                 if (recentLogsList.length === 0) {
                     queryLogsTableBody.innerHTML = `
@@ -69,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <td style="padding: 1rem; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 400px;">${sanitizeHtmlString(logEntry.user_query)}</td>
                         <td style="padding: 1rem; border-bottom: 1px solid var(--border-color);">${alertBadge}</td>
                         <td style="padding: 1rem; border-bottom: 1px solid var(--border-color); text-align:right; white-space: nowrap;">
-                            <button class="btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; border-radius: 4px;" onclick="alert('Query details: \\n\\nPrompt: ${sanitizeHtmlString(logEntry.user_query)}\\n\\nResponse: ${sanitizeHtmlString(logEntry.ai_response)}')">
+                            <button class="btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; border-radius: 4px;" onclick="inspectLogEntry(${logEntry.id})">
                                 Inspect
                             </button>
                             <button class="btn-delete-log" onclick="deleteLogEntry(${logEntry.id})">
@@ -84,6 +85,71 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {
             console.error('Failed to reload metrics dashboard views: ', err);
         }
+    };
+
+    window.inspectLogEntry = (logId) => {
+        const log = (window.loadedLogs || []).find(l => l.id === logId);
+        if (!log) return;
+
+        document.getElementById('modal-timestamp').textContent = new Date(log.created_at).toLocaleString();
+        
+        const severityBadge = document.getElementById('modal-severity');
+        severityBadge.textContent = log.severity_level.toUpperCase();
+        severityBadge.className = 'badge';
+        if (log.has_interaction_warnings) {
+            severityBadge.style.backgroundColor = 'var(--warning-major-glow)';
+            severityBadge.style.color = 'var(--warning-major)';
+            severityBadge.style.border = '1px solid var(--warning-major)';
+            severityBadge.style.padding = '0.2rem 0.5rem';
+            severityBadge.style.borderRadius = '4px';
+            severityBadge.style.fontSize = '0.8rem';
+            severityBadge.style.fontWeight = '600';
+        } else {
+            severityBadge.style.backgroundColor = 'rgba(175, 75, 45, 0.05)';
+            severityBadge.style.color = 'var(--accent-teal)';
+            severityBadge.style.border = '1px solid var(--accent-teal)';
+            severityBadge.style.padding = '0.2rem 0.5rem';
+            severityBadge.style.borderRadius = '4px';
+            severityBadge.style.fontSize = '0.8rem';
+            severityBadge.style.fontWeight = '600';
+        }
+
+        document.getElementById('modal-query').textContent = log.user_query;
+        
+        // Parse markdown using marked.js
+        const responseDiv = document.getElementById('modal-response');
+        if (typeof marked !== 'undefined') {
+            responseDiv.innerHTML = marked.parse(log.ai_response);
+        } else {
+            responseDiv.textContent = log.ai_response;
+        }
+
+        // Citations rendering
+        const citationsSection = document.getElementById('modal-citations-section');
+        const citationsList = document.getElementById('modal-citations');
+        citationsList.innerHTML = '';
+        
+        if (log.citations) {
+            try {
+                const citations = JSON.parse(log.citations);
+                if (citations && citations.length > 0) {
+                    citations.forEach(c => {
+                        const li = document.createElement('li');
+                        li.textContent = `${c.source} (Page ${c.page || 1})`;
+                        citationsList.appendChild(li);
+                    });
+                    citationsSection.style.display = 'block';
+                } else {
+                    citationsSection.style.display = 'none';
+                }
+            } catch (e) {
+                citationsSection.style.display = 'none';
+            }
+        } else {
+            citationsSection.style.display = 'none';
+        }
+
+        document.getElementById('inspect-modal').style.display = 'flex';
     };
 
     window.deleteLogEntry = async (logId) => {
@@ -105,7 +171,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // Close Modal event listeners
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const inspectModal = document.getElementById('inspect-modal');
+    if (closeModalBtn && inspectModal) {
+        const closeModal = () => {
+            inspectModal.style.display = 'none';
+        };
+        closeModalBtn.addEventListener('click', closeModal);
+        inspectModal.addEventListener('click', (e) => {
+            if (e.target === inspectModal) {
+                closeModal();
+            }
+        });
+    }
+
     // Load metrics initially on boot
     reloadDashboardMetrics();
 });
-
