@@ -26,12 +26,13 @@ class UploadService:
         return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
     @staticmethod
-    def handle_upload(file):
+    def handle_upload(file, session_id=None):
         """
         Performs file validation, directory saves, and triggers the RAG ingest system.
         
         Args:
             file (FileStorage): Flask file storage package.
+            session_id (str, optional): Association key for session-specific document scoping.
             
         Returns:
             dict: Metadata properties showing success details.
@@ -57,6 +58,7 @@ class UploadService:
 
         # Log document entry
         doc_entry = Document(
+            session_id=session_id,
             filename=filename,
             filepath=filepath,
             file_size=file_size,

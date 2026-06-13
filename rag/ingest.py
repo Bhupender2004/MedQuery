@@ -56,13 +56,18 @@ class IngestionService:
                 print(f"Warning: No valid segments extracted from {filename}.")
                 chunks = [{"text": "Empty file context", "page": 1}]
 
+            # Get document details to retrieve session_id
+            doc_record = Document.query.get(document_id)
+            session_id_val = doc_record.session_id if doc_record and doc_record.session_id else ""
+
             # Attach source context metadata to segments
             for index, chunk in enumerate(chunks):
                 chunk['metadata'] = {
                     'source': filename,
                     'page': chunk.get('page', 1),
                     'chunk_index': index,
-                    'document_id': document_id
+                    'document_id': document_id,
+                    'session_id': session_id_val
                 }
 
             # 3. Vector calculation

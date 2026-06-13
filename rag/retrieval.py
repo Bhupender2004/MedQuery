@@ -9,9 +9,31 @@ class RetrievalService:
     Orchestrates search queries against local ChromaDB stores.
     Defines intelligent fallback responses for standard drugs to assist local runs.
     """
+    _chroma_client = None
+    _collection = None
+
+    @classmethod
+    def get_collection(cls):
+        """
+        Retrieves the cached ChromaDB collection instance or initializes it.
+        """
+        if cls._collection is None:
+            import os
+            import chromadb
+            from flask import current_app
+            
+            try:
+                persist_dir = current_app.config.get('CHROMA_PERSIST_DIR', 'chroma_db')
+            except RuntimeError:
+                persist_dir = os.getenv('CHROMA_PERSIST_DIR', 'chroma_db')
+                
+            print(f"Initializing ChromaDB PersistentClient with directory: {persist_dir}")
+            cls._chroma_client = chromadb.PersistentClient(path=persist_dir)
+            cls._collection = cls._chroma_client.get_or_create_collection(name="medical_documents")
+        return cls._collection
 
     @staticmethod
-    def retrieve(query, limit=3):
+    def retrieve(query, limit=3, session_id=None):
         """
         Queries ChromaDB database using semantic embeddings.
         Returns a fallback set of clinical chunks matching drug tokens if Chroma is unconfigured.
@@ -19,12 +41,13 @@ class RetrievalService:
         Args:
             query (str): The search phrase.
             limit (int): Number of chunks to retrieve.
+            session_id (str, optional): The current session ID to scope the documents.
             
         Returns:
             list: List of retrieved dict objects.
                   Example: [{"text": "...", "metadata": {"source": "...", "page": 1}, "score": 0.85}]
         """
-        print(f"Retrieval Service: searching query vectors for: '{query}'")
+        print(f"Retrieval Service: searching query vectors for: '{query}' in session '{session_id}'")
 
         results = []
         
@@ -38,8 +61,11 @@ class RetrievalService:
             doc_keywords = ['prescription', 'report', 'upload', 'document', 'file', 'summarize', 'summary', 'analyze', 'my health', 'my medical', 'my lab', 'pdf', 'txt', 'csv']
             is_doc_query = any(k in query_lower for k in doc_keywords)
             
-            if is_doc_query and has_app_context():
-                latest_docs = Document.query.filter(Document.status.in_(['completed', 'processing'])).order_by(Document.id.desc()).limit(2).all()
+            if is_doc_query and has_app_context() and session_id:
+                latest_docs = Document.query.filter(
+                    Document.status.in_(['completed', 'processing']),
+                    Document.session_id == session_id
+                ).order_by(Document.id.desc()).limit(2).all()
                 if latest_docs:
                     print(f"Retrieval Service: Detected document query. Fetching content of latest {len(latest_docs)} documents.")
                     for doc_record in latest_docs:
@@ -70,24 +96,17 @@ class RetrievalService:
 
         # 2. Attempt ChromaDB semantic search
         try:
-            import os
-            from flask import current_app
             from rag.embeddings import EmbeddingService
-            import chromadb
             
-            try:
-                persist_dir = current_app.config.get('CHROMA_PERSIST_DIR', 'chroma_db')
-            except RuntimeError:
-                persist_dir = os.getenv('CHROMA_PERSIST_DIR', 'chroma_db')
-                
             query_embedding = EmbeddingService.embed_texts([query])[0]
+            collection = RetrievalService.get_collection()
             
-            chroma_client = chromadb.PersistentClient(path=persist_dir)
-            collection = chroma_client.get_or_create_collection(name="medical_documents")
+            where_filter = {'session_id': session_id if session_id else ''}
             
             query_results = collection.query(
                 query_embeddings=[query_embedding],
-                n_results=limit
+                n_results=limit,
+                where=where_filter
             )
             
             if query_results and query_results.get('documents') and query_results['documents'][0]:

@@ -14,6 +14,7 @@ class Document(db.Model):
     __tablename__ = 'documents'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    session_id = db.Column(db.String(100), nullable=True)
     filename = db.Column(db.String(255), nullable=False)
     filepath = db.Column(db.String(512), nullable=False)
     file_size = db.Column(db.Integer, nullable=False)
@@ -30,6 +31,7 @@ class Document(db.Model):
         """
         return {
             'id': self.id,
+            'session_id': self.session_id,
             'filename': self.filename,
             'filepath': self.filepath,
             'file_size': self.file_size,

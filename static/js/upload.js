@@ -42,6 +42,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const multipartPayload = new FormData();
         multipartPayload.append('file', fileToUpload);
 
+        // Retrieve and append current session ID from localStorage if active
+        const currentSessionId = localStorage.getItem('medquery_current_session');
+        if (currentSessionId) {
+            multipartPayload.append('session_id', currentSessionId);
+        }
+
         displayFeedback('Uploading document stream and triggering vector parsing pipeline...', 'info');
 
         try {

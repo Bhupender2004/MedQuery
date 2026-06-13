@@ -24,20 +24,32 @@ def test_embedding_service_mock():
         assert isinstance(vectors[0][0], float)
 
 def test_retrieval_service_fallback():
-    # Test fallback logic if ChromaDB throws an error
-    with patch('chromadb.PersistentClient') as mock_chroma:
-        mock_chroma.side_effect = Exception("Chroma offline")
-        
-        # Retrieval checks standard medical tokens in fallback
-        results_aspirin = RetrievalService.retrieve("Is it safe to mix aspirin?")
-        assert len(results_aspirin) > 0
-        assert any("Aspirin" in r['text'] for r in results_aspirin)
-        assert all(r['score'] > 0.0 for r in results_aspirin)
-        
-        results_ibuprofen = RetrievalService.retrieve("Lisinopril and Ibuprofen safety?")
-        assert len(results_ibuprofen) > 0
-        assert any("Ibuprofen" in r['text'] or "ACE Inhibitor" in r['text'] for r in results_ibuprofen)
-        
-        results_unrelated = RetrievalService.retrieve("random queries")
-        assert len(results_unrelated) > 0
-        assert any("CYP450" in r['text'] or "Standard Practice" in r['text'] for r in results_unrelated)
+    # Reset cached collection to force initialization and trigger the mock
+    from rag.retrieval import RetrievalService
+    old_client = RetrievalService._chroma_client
+    old_collection = RetrievalService._collection
+    RetrievalService._chroma_client = None
+    RetrievalService._collection = None
+    
+    try:
+        # Test fallback logic if ChromaDB throws an error
+        with patch('chromadb.PersistentClient') as mock_chroma:
+            mock_chroma.side_effect = Exception("Chroma offline")
+            
+            # Retrieval checks standard medical tokens in fallback
+            results_aspirin = RetrievalService.retrieve("Is it safe to mix aspirin?")
+            assert len(results_aspirin) > 0
+            assert any("Aspirin" in r['text'] for r in results_aspirin)
+            assert all(r['score'] > 0.0 for r in results_aspirin)
+            
+            results_ibuprofen = RetrievalService.retrieve("Lisinopril and Ibuprofen safety?")
+            assert len(results_ibuprofen) > 0
+            assert any("Ibuprofen" in r['text'] or "ACE Inhibitor" in r['text'] for r in results_ibuprofen)
+            
+            results_unrelated = RetrievalService.retrieve("random queries")
+            assert len(results_unrelated) > 0
+            assert any("CYP450" in r['text'] or "Standard Practice" in r['text'] for r in results_unrelated)
+    finally:
+        # Restore cache
+        RetrievalService._chroma_client = old_client
+        RetrievalService._collection = old_collection

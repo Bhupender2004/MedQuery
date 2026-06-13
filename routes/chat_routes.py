@@ -52,3 +52,18 @@ def get_history():
             'error': 'An error occurred fetching chat logs.',
             'message': str(err)
         }), 500
+
+@chat_bp.route('/sessions', methods=['GET'])
+def get_sessions():
+    """
+    GET /api/chat/sessions
+    Retrieves a list of all distinct sessions with titles and timestamps.
+    """
+    try:
+        sessions = ChatService.get_distinct_sessions()
+        return jsonify(sessions), 200
+    except Exception as err:
+        return jsonify({
+            'error': 'An error occurred fetching distinct sessions.',
+            'message': str(err)
+        }), 500

@@ -23,14 +23,23 @@
         </div>
     </header>
 
-    <main style="display: grid; grid-template-columns: 3fr 1fr; gap: 2rem; align-items: start;">
+    <main class="chat-layout">
+        <!-- Chat History Sidebar Column -->
+        <aside class="chat-sidebar">
+            <div class="sidebar-header">
+                <button id="new-chat-btn" class="btn-new-chat">
+                    <span>➕</span> New Chat
+                </button>
+            </div>
+            <div id="sessions-list" class="sessions-list">
+                <!-- Dynamic session links populated here -->
+            </div>
+        </aside>
+
         <!-- Conversational Interface Column -->
         <section class="chat-container">
             <div class="chat-messages" id="chat-messages">
-                <div class="message assistant">
-                    <p>Hello! I am your clinical pharmacy assistant. Type in drug names or clinical combinations to verify interactions and check against your uploaded reference documents.</p>
-                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">Try asking: <em>"Can I take Aspirin with Warfarin?"</em> or <em>"Is there an issue with Ibuprofen and Lisinopril?"</em></p>
-                </div>
+                <!-- Chat welcome message or active logs rendered here -->
             </div>
             <form id="chat-form" class="chat-input-area">
                 <input type="text" id="chat-input" class="chat-input" placeholder="Query medications (e.g. Aspirin + Warfarin)..." autocomplete="off" required>
@@ -39,7 +48,7 @@
         </section>
 
         <!-- Quick Help / Instructions Column -->
-        <aside style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <aside class="chat-help-panel" style="display: flex; flex-direction: column; gap: 1.5rem;">
             <div class="dashboard-card" style="padding: 1.25rem;">
                 <h4 style="font-weight: 600; margin-bottom: 0.75rem; color: var(--accent-teal);">Clinical Checklist</h4>
                 <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.85rem; color: var(--text-secondary);">

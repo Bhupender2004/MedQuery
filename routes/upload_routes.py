@@ -24,7 +24,8 @@ def upload_file():
         return jsonify({'error': 'Selected filename must not be blank.'}), 400
 
     try:
-        result = UploadService.handle_upload(file)
+        session_id = request.form.get('session_id') or request.args.get('session_id')
+        result = UploadService.handle_upload(file, session_id)
         # 202 Accepted signifies background ingestion trigger
         return jsonify(result), 202
     except ValueError as val_err:
