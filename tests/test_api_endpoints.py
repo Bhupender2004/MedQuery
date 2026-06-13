@@ -103,3 +103,50 @@ def test_dashboard_stats_endpoint(client):
     assert 'total_queries' in data
     assert 'total_warnings' in data
     assert 'severity_distribution' in data
+
+def test_delete_operations(client):
+    # 1. Add a query log by posting to ask
+    with patch('services.chat_service.LLMService.generate_response') as mock_llm:
+        mock_llm.return_value = "Safe combination."
+        response = client.post('/api/chat/ask', json={
+            "query": "Is Ibuprofen safe?",
+            "session_id": "session-delete-test"
+        })
+        assert response.status_code == 200
+
+    # 2. Verify it's in history
+    history_res = client.get('/api/chat/history?session_id=session-delete-test')
+    assert history_res.status_code == 200
+    history_data = json.loads(history_res.data)
+    assert len(history_data) == 1
+    log_id = history_data[0]['id']
+
+    # 3. Test deleting this log entry
+    delete_log_res = client.delete(f'/api/chat/log/{log_id}')
+    assert delete_log_res.status_code == 200
+    
+    # 4. Verify history is now empty
+    history_res2 = client.get('/api/chat/history?session_id=session-delete-test')
+    assert history_res2.status_code == 200
+    history_data2 = json.loads(history_res2.data)
+    assert len(history_data2) == 0
+
+    # 5. Create another log for session deletion test
+    with patch('services.chat_service.LLMService.generate_response') as mock_llm:
+        mock_llm.return_value = "Safe combination."
+        response = client.post('/api/chat/ask', json={
+            "query": "Is Metformin safe?",
+            "session_id": "session-delete-test"
+        })
+        assert response.status_code == 200
+
+    # 6. Test deleting the session
+    delete_session_res = client.delete('/api/chat/session/session-delete-test')
+    assert delete_session_res.status_code == 200
+
+    # 7. Verify history is empty
+    history_res3 = client.get('/api/chat/history?session_id=session-delete-test')
+    assert history_res3.status_code == 200
+    history_data3 = json.loads(history_res3.data)
+    assert len(history_data3) == 0
+

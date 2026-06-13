@@ -67,3 +67,40 @@ def get_sessions():
             'error': 'An error occurred fetching distinct sessions.',
             'message': str(err)
         }), 500
+
+@chat_bp.route('/session/<session_id>', methods=['DELETE'])
+def delete_session(session_id):
+    """
+    DELETE /api/chat/session/<session_id>
+    Cleans up all logs, documents, files, and vector chunks for a session.
+    """
+    if not session_id:
+        return jsonify({'error': 'A session_id parameter is required.'}), 400
+
+    try:
+        ChatService.delete_session(session_id)
+        return jsonify({'message': f'Session {session_id} successfully deleted.'}), 200
+    except Exception as err:
+        return jsonify({
+            'error': 'An error occurred deleting the session.',
+            'message': str(err)
+        }), 500
+
+@chat_bp.route('/log/<int:log_id>', methods=['DELETE'])
+def delete_log(log_id):
+    """
+    DELETE /api/chat/log/<log_id>
+    Deletes a single QueryLog entry.
+    """
+    try:
+        success = ChatService.delete_log(log_id)
+        if success:
+            return jsonify({'message': f'Log entry {log_id} successfully deleted.'}), 200
+        else:
+            return jsonify({'error': f'Log entry {log_id} not found.'}), 404
+    except Exception as err:
+        return jsonify({
+            'error': 'An error occurred deleting the log entry.',
+            'message': str(err)
+        }), 500
+

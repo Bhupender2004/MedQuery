@@ -144,7 +144,42 @@ document.addEventListener('DOMContentLoaded', () => {
                 const sessionItem = document.createElement('div');
                 sessionItem.className = `session-item ${session.session_id === currentSessionId ? 'active' : ''}`;
                 sessionItem.dataset.id = session.session_id;
-                sessionItem.textContent = session.title || 'Untitled Chat';
+
+                const titleSpan = document.createElement('span');
+                titleSpan.className = 'session-title';
+                titleSpan.textContent = session.title || 'Untitled Chat';
+                sessionItem.appendChild(titleSpan);
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'btn-delete-session';
+                deleteBtn.innerHTML = '&times;';
+                deleteBtn.title = 'Delete conversation';
+                deleteBtn.addEventListener('click', async (e) => {
+                    e.stopPropagation(); // Prevent trigger click on sessionItem
+
+                    if (confirm('Are you sure you want to delete this chat conversation? This will delete all queries and reference files associated with this chat.')) {
+                        try {
+                            const deleteResponse = await fetch(`/api/chat/session/${session.session_id}`, {
+                                method: 'DELETE'
+                            });
+                            const deleteResult = await deleteResponse.json();
+                            if (deleteResponse.ok) {
+                                if (currentSessionId === session.session_id) {
+                                    startNewChat();
+                                } else {
+                                    // Just reload the sidebar
+                                    await loadSessionsSidebar();
+                                }
+                            } else {
+                                alert(`Error: ${deleteResult.error || 'Failed to delete session'}`);
+                            }
+                        } catch (deleteErr) {
+                            console.error('Failed to delete session:', deleteErr);
+                            alert('Network error. Failed to delete session.');
+                        }
+                    }
+                });
+                sessionItem.appendChild(deleteBtn);
                 
                 sessionItem.addEventListener('click', () => {
                     // Update active styling
@@ -159,6 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Failed to load chat sessions list:', err);
         }
     };
+
 
     // Start a completely fresh chat
     const startNewChat = () => {

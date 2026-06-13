@@ -226,3 +226,64 @@ class ChatService:
         except Exception as db_err:
             print(f"Warning: Failed to retrieve distinct sessions: {db_err}")
             return []
+
+    @staticmethod
+    def delete_session(session_id):
+        """
+        Deletes all logged queries, uploaded documents (including physical files),
+        and vector chunks from ChromaDB associated with a session ID.
+        """
+        import os
+        try:
+            # 1. Delete associated QueryLog records
+            QueryLog.query.filter_by(session_id=session_id).delete()
+
+            # 2. Find associated Document records
+            from models.document_model import Document
+            docs = Document.query.filter_by(session_id=session_id).all()
+
+            # 3. Clean up physical files for each document
+            for doc in docs:
+                if doc.filepath and os.path.exists(doc.filepath):
+                    try:
+                        os.remove(doc.filepath)
+                        print(f"File removed: {doc.filepath}")
+                    except Exception as fs_err:
+                        print(f"Warning: Failed to delete file on disk: {fs_err}")
+                
+                # Delete Document record
+                db.session.delete(doc)
+
+            # 4. Clean up ChromaDB collection vectors
+            try:
+                collection = RetrievalService.get_collection()
+                if collection:
+                    collection.delete(where={'session_id': session_id})
+                    print(f"ChromaDB: Cleared vectors for session: {session_id}")
+            except Exception as chroma_err:
+                print(f"Warning: Failed to delete session vectors from ChromaDB: {chroma_err}")
+
+            db.session.commit()
+            return True
+        except Exception as err:
+            db.session.rollback()
+            print(f"Error deleting session: {err}")
+            raise err
+
+    @staticmethod
+    def delete_log(log_id):
+        """
+        Deletes a single QueryLog entry by its ID.
+        """
+        try:
+            log_entry = db.session.get(QueryLog, log_id)
+            if log_entry:
+                db.session.delete(log_entry)
+                db.session.commit()
+                return True
+            return False
+        except Exception as err:
+            db.session.rollback()
+            print(f"Error deleting log entry {log_id}: {err}")
+            raise err
+

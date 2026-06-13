@@ -68,9 +68,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         <td style="padding: 1rem; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; color: var(--text-secondary);">${timestampStr}</td>
                         <td style="padding: 1rem; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 400px;">${sanitizeHtmlString(logEntry.user_query)}</td>
                         <td style="padding: 1rem; border-bottom: 1px solid var(--border-color);">${alertBadge}</td>
-                        <td style="padding: 1rem; border-bottom: 1px solid var(--border-color); text-align:right;">
+                        <td style="padding: 1rem; border-bottom: 1px solid var(--border-color); text-align:right; white-space: nowrap;">
                             <button class="btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; border-radius: 4px;" onclick="alert('Query details: \\n\\nPrompt: ${sanitizeHtmlString(logEntry.user_query)}\\n\\nResponse: ${sanitizeHtmlString(logEntry.ai_response)}')">
                                 Inspect
+                            </button>
+                            <button class="btn-delete-log" onclick="deleteLogEntry(${logEntry.id})">
+                                Delete
                             </button>
                         </td>
                     `;
@@ -83,6 +86,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    window.deleteLogEntry = async (logId) => {
+        if (confirm('Are you sure you want to delete this specific query log entry?')) {
+            try {
+                const response = await fetch(`/api/chat/log/${logId}`, {
+                    method: 'DELETE'
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    await reloadDashboardMetrics();
+                } else {
+                    alert(`Error: ${result.error || 'Failed to delete log entry'}`);
+                }
+            } catch (err) {
+                console.error('Failed to delete query log:', err);
+                alert('Network error. Failed to delete query log.');
+            }
+        }
+    };
+
     // Load metrics initially on boot
     reloadDashboardMetrics();
 });
+
