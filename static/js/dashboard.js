@@ -12,6 +12,63 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!docCountField) return;
 
+    // Custom Delete Confirmation Modal Logic
+    const deleteModal = document.getElementById('delete-confirm-modal');
+    const deleteModalQuery = document.getElementById('delete-log-query');
+    const btnCancelDelete = document.getElementById('btn-cancel-delete');
+    const btnConfirmDelete = document.getElementById('btn-confirm-delete');
+    const closeDeleteModalBtn = document.getElementById('close-delete-modal-btn');
+    
+    let logIdToDelete = null;
+
+    const closeDeleteModal = () => {
+        logIdToDelete = null;
+        if (deleteModal) deleteModal.style.display = 'none';
+    };
+
+    if (btnCancelDelete) {
+        btnCancelDelete.addEventListener('click', closeDeleteModal);
+    }
+    if (closeDeleteModalBtn) {
+        closeDeleteModalBtn.addEventListener('click', closeDeleteModal);
+    }
+    if (deleteModal) {
+        deleteModal.addEventListener('click', (e) => {
+            if (e.target === deleteModal) {
+                closeDeleteModal();
+            }
+        });
+    }
+
+    if (btnConfirmDelete) {
+        btnConfirmDelete.addEventListener('click', async () => {
+            if (!logIdToDelete) return;
+            
+            try {
+                btnConfirmDelete.disabled = true;
+                btnConfirmDelete.textContent = 'Deleting...';
+                
+                const response = await fetch(`/api/chat/log/${logIdToDelete}`, {
+                    method: 'DELETE'
+                });
+                const result = await response.json();
+                
+                if (response.ok) {
+                    closeDeleteModal();
+                    await reloadDashboardMetrics();
+                } else {
+                    alert(`Error: ${result.error || 'Failed to delete log entry'}`);
+                }
+            } catch (err) {
+                console.error('Failed to delete query log:', err);
+                alert('Network error. Failed to delete query log.');
+            } finally {
+                btnConfirmDelete.disabled = false;
+                btnConfirmDelete.textContent = 'Delete';
+            }
+        });
+    }
+
     // Helper: Escapes queries strings to prevent injection in table renders
     const sanitizeHtmlString = (textStr) => {
         if (!textStr) return '';
@@ -70,14 +127,23 @@ document.addEventListener('DOMContentLoaded', () => {
                         <td style="padding: 1rem; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 400px;">${sanitizeHtmlString(logEntry.user_query)}</td>
                         <td style="padding: 1rem; border-bottom: 1px solid var(--border-color);">${alertBadge}</td>
                         <td style="padding: 1rem; border-bottom: 1px solid var(--border-color); text-align:right; white-space: nowrap;">
-                            <button class="btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; border-radius: 4px;" onclick="inspectLogEntry(${logEntry.id})">
+                            <button class="btn-inspect-log btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; border-radius: 4px;">
                                 Inspect
                             </button>
-                            <button class="btn-delete-log" onclick="deleteLogEntry(${logEntry.id})">
+                            <button class="btn-delete-log">
                                 Delete
                             </button>
                         </td>
                     `;
+                    
+                    rowElement.querySelector('.btn-inspect-log').addEventListener('click', () => {
+                        inspectLogEntry(logEntry.id);
+                    });
+                    
+                    rowElement.querySelector('.btn-delete-log').addEventListener('click', () => {
+                        deleteLogEntry(logEntry.id);
+                    });
+                    
                     queryLogsTableBody.appendChild(rowElement);
                 });
             }
@@ -152,22 +218,16 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('inspect-modal').style.display = 'flex';
     };
 
-    window.deleteLogEntry = async (logId) => {
-        if (confirm('Are you sure you want to delete this specific query log entry?')) {
-            try {
-                const response = await fetch(`/api/chat/log/${logId}`, {
-                    method: 'DELETE'
-                });
-                const result = await response.json();
-                if (response.ok) {
-                    await reloadDashboardMetrics();
-                } else {
-                    alert(`Error: ${result.error || 'Failed to delete log entry'}`);
-                }
-            } catch (err) {
-                console.error('Failed to delete query log:', err);
-                alert('Network error. Failed to delete query log.');
+    window.deleteLogEntry = (logId) => {
+        const log = (window.loadedLogs || []).find(l => l.id === logId);
+        if (!log) return;
+        
+        logIdToDelete = logId;
+        if (deleteModal) {
+            if (deleteModalQuery) {
+                deleteModalQuery.textContent = `"${log.user_query}"`;
             }
+            deleteModal.style.display = 'flex';
         }
     };
 
