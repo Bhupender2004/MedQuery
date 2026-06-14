@@ -14,6 +14,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentSessionId = '';
 
+    // Custom Delete Confirmation Modal Logic
+    const deleteModal = document.getElementById('delete-confirm-modal');
+    const deleteModalTitle = document.getElementById('delete-session-title');
+    const btnCancelDelete = document.getElementById('btn-cancel-delete');
+    const btnConfirmDelete = document.getElementById('btn-confirm-delete');
+    const closeDeleteModalBtn = document.getElementById('close-delete-modal-btn');
+    
+    let sessionToDelete = null;
+
+    const closeDeleteModal = () => {
+        sessionToDelete = null;
+        if (deleteModal) deleteModal.style.display = 'none';
+    };
+
+    if (btnCancelDelete) {
+        btnCancelDelete.addEventListener('click', closeDeleteModal);
+    }
+    if (closeDeleteModalBtn) {
+        closeDeleteModalBtn.addEventListener('click', closeDeleteModal);
+    }
+    if (deleteModal) {
+        deleteModal.addEventListener('click', (e) => {
+            if (e.target === deleteModal) {
+                closeDeleteModal();
+            }
+        });
+    }
+
+    if (btnConfirmDelete) {
+        btnConfirmDelete.addEventListener('click', async () => {
+            if (!sessionToDelete) return;
+            
+            const sessionId = sessionToDelete.id;
+            try {
+                btnConfirmDelete.disabled = true;
+                btnConfirmDelete.textContent = 'Deleting...';
+                
+                const deleteResponse = await fetch(`/api/chat/session/${sessionId}`, {
+                    method: 'DELETE'
+                });
+                const deleteResult = await deleteResponse.json();
+                
+                if (deleteResponse.ok) {
+                    closeDeleteModal();
+                    if (currentSessionId === sessionId) {
+                        startNewChat();
+                    } else {
+                        await loadSessionsSidebar();
+                    }
+                } else {
+                    alert(`Error: ${deleteResult.error || 'Failed to delete session'}`);
+                }
+            } catch (deleteErr) {
+                console.error('Failed to delete session:', deleteErr);
+                alert('Network error. Failed to delete session.');
+            } finally {
+                btnConfirmDelete.disabled = false;
+                btnConfirmDelete.textContent = 'Delete';
+            }
+        });
+    }
+
     // Helper: Generate a unique session token
     const generateSessionId = () => {
         return 'session-' + Math.random().toString(36).substring(2, 15) + '-' + Date.now();
@@ -154,29 +216,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 deleteBtn.className = 'btn-delete-session';
                 deleteBtn.innerHTML = '&times;';
                 deleteBtn.title = 'Delete conversation';
-                deleteBtn.addEventListener('click', async (e) => {
+                deleteBtn.addEventListener('click', (e) => {
                     e.stopPropagation(); // Prevent trigger click on sessionItem
-
-                    if (confirm('Are you sure you want to delete this chat conversation? This will delete all queries and reference files associated with this chat.')) {
-                        try {
-                            const deleteResponse = await fetch(`/api/chat/session/${session.session_id}`, {
-                                method: 'DELETE'
-                            });
-                            const deleteResult = await deleteResponse.json();
-                            if (deleteResponse.ok) {
-                                if (currentSessionId === session.session_id) {
-                                    startNewChat();
-                                } else {
-                                    // Just reload the sidebar
-                                    await loadSessionsSidebar();
-                                }
-                            } else {
-                                alert(`Error: ${deleteResult.error || 'Failed to delete session'}`);
-                            }
-                        } catch (deleteErr) {
-                            console.error('Failed to delete session:', deleteErr);
-                            alert('Network error. Failed to delete session.');
-                        }
+                    
+                    const sessionTitle = session.title || 'Untitled Chat';
+                    sessionToDelete = { id: session.session_id, title: sessionTitle };
+                    
+                    if (deleteModal) {
+                        deleteModalTitle.textContent = sessionTitle;
+                        deleteModal.style.display = 'flex';
                     }
                 });
                 sessionItem.appendChild(deleteBtn);

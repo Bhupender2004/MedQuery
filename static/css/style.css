@@ -398,13 +398,13 @@ footer {
     background: none;
     border: none;
     color: var(--text-muted);
-    font-size: 1.15rem;
+    font-size: 1.25rem;
     font-weight: 500;
     cursor: pointer;
-    padding: 0 4px;
-    border-radius: 4px;
+    padding: 4px 8px;
+    border-radius: 6px;
     line-height: 1;
-    opacity: 0;
+    opacity: 0.4;
     transition: var(--transition-smooth);
     display: flex;
     align-items: center;
@@ -413,12 +413,13 @@ footer {
 
 .session-item:hover .btn-delete-session,
 .session-item.active .btn-delete-session {
-    opacity: 1;
+    opacity: 0.8;
 }
 
 .btn-delete-session:hover {
     color: var(--warning-major);
-    background-color: rgba(255, 0, 0, 0.15);
+    background-color: rgba(255, 80, 80, 0.15);
+    opacity: 1 !important;
 }
 
 .btn-delete-log {
