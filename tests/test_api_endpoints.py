@@ -103,6 +103,14 @@ def test_dashboard_stats_endpoint(client):
     assert 'total_queries' in data
     assert 'total_warnings' in data
     assert 'severity_distribution' in data
+    
+    assert 'weekly_audit_volume' in data
+    assert 'labels' in data['weekly_audit_volume']
+    assert 'values' in data['weekly_audit_volume']
+    
+    assert 'most_flagged_drugs' in data
+    assert 'labels' in data['most_flagged_drugs']
+    assert 'values' in data['most_flagged_drugs']
 
 def test_delete_operations(client):
     # 1. Add a query log by posting to ask

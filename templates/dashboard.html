@@ -45,6 +45,28 @@
             </div>
         </section>
 
+        <!-- Charts Row -->
+        <section class="charts-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+            <div class="dashboard-card" style="padding: 1.5rem; display: flex; flex-direction: column;">
+                <h4 style="font-size: 1rem; font-weight: 600; color: var(--accent-teal); margin-bottom: 1.25rem; text-align: center; text-transform: uppercase; letter-spacing: 0.5px;">Weekly Audit Volume</h4>
+                <div style="position: relative; flex: 1; min-height: 240px; width: 100%;">
+                    <canvas id="chart-audit-volume"></canvas>
+                </div>
+            </div>
+            <div class="dashboard-card" style="padding: 1.5rem; display: flex; flex-direction: column;">
+                <h4 style="font-size: 1rem; font-weight: 600; color: var(--accent-teal); margin-bottom: 1.25rem; text-align: center; text-transform: uppercase; letter-spacing: 0.5px;">Interaction Severity Breakdown</h4>
+                <div style="position: relative; flex: 1; min-height: 240px; width: 100%; display: flex; justify-content: center; align-items: center;">
+                    <canvas id="chart-severity-breakdown"></canvas>
+                </div>
+            </div>
+            <div class="dashboard-card" style="padding: 1.5rem; display: flex; flex-direction: column;">
+                <h4 style="font-size: 1rem; font-weight: 600; color: var(--accent-teal); margin-bottom: 1.25rem; text-align: center; text-transform: uppercase; letter-spacing: 0.5px;">Most Flagged Compounds</h4>
+                <div style="position: relative; flex: 1; min-height: 240px; width: 100%;">
+                    <canvas id="chart-flagged-compounds"></canvas>
+                </div>
+            </div>
+        </section>
+
         <!-- Logs Tables -->
         <section class="dashboard-card" style="overflow-x: auto;">
             <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--accent-teal);">
@@ -132,6 +154,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 </body>
 </html>

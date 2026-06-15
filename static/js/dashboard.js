@@ -12,6 +12,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!docCountField) return;
 
+    // Chart.js instance tracking variables
+    let auditVolumeChart = null;
+    let severityBreakdownChart = null;
+    let flaggedCompoundsChart = null;
+
     // Custom Delete Confirmation Modal Logic
     const deleteModal = document.getElementById('delete-confirm-modal');
     const deleteModalQuery = document.getElementById('delete-log-query');
@@ -148,8 +153,169 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
 
+            // Render Chart.js visual graphs
+            renderCharts(metrics);
+
         } catch (err) {
             console.error('Failed to reload metrics dashboard views: ', err);
+        }
+    };
+
+    // Helper to construct and render Chart.js graphs
+    const renderCharts = (metrics) => {
+        // 1. Weekly Audit Volume Line Chart
+        const canvasVolume = document.getElementById('chart-audit-volume');
+        if (canvasVolume) {
+            const ctxVolume = canvasVolume.getContext('2d');
+            if (auditVolumeChart) auditVolumeChart.destroy();
+            
+            const volumeData = metrics.weekly_audit_volume || { labels: [], values: [] };
+            auditVolumeChart = new Chart(ctxVolume, {
+                type: 'line',
+                data: {
+                    labels: volumeData.labels,
+                    datasets: [{
+                        label: 'Queries Checked',
+                        data: volumeData.values,
+                        borderColor: 'hsl(175, 75%, 45%)',
+                        backgroundColor: 'hsla(175, 75%, 45%, 0.08)',
+                        borderWidth: 2.5,
+                        fill: true,
+                        tension: 0.35,
+                        pointBackgroundColor: 'hsl(175, 75%, 45%)',
+                        pointBorderColor: 'hsl(210, 30%, 95%)',
+                        pointHoverRadius: 6,
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'hsl(220, 20%, 14%)',
+                            titleColor: 'hsl(210, 30%, 95%)',
+                            bodyColor: 'hsl(210, 15%, 75%)',
+                            borderColor: 'hsl(220, 15%, 22%)',
+                            borderWidth: 1,
+                            titleFont: { family: 'Inter', weight: '600' },
+                            bodyFont: { family: 'Inter' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'hsla(220, 15%, 22%, 0.4)' },
+                            ticks: { color: 'hsl(210, 15%, 75%)', font: { family: 'Inter', size: 10 } }
+                        },
+                        y: {
+                            grid: { color: 'hsla(220, 15%, 22%, 0.4)' },
+                            ticks: { color: 'hsl(210, 15%, 75%)', font: { family: 'Inter', size: 10 }, stepSize: 1, beginAtZero: true }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 2. Interaction Severity Breakdown Donut Chart
+        const canvasSeverity = document.getElementById('chart-severity-breakdown');
+        if (canvasSeverity) {
+            const ctxSeverity = canvasSeverity.getContext('2d');
+            if (severityBreakdownChart) severityBreakdownChart.destroy();
+            
+            const dist = metrics.severity_distribution || { minor: 0, moderate: 0, major: 0 };
+            const totalWarns = dist.minor + dist.moderate + dist.major;
+            
+            severityBreakdownChart = new Chart(ctxSeverity, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Low Severity', 'Moderate Severity', 'High Severity'],
+                    datasets: [{
+                        data: [dist.minor, dist.moderate, dist.major],
+                        backgroundColor: [
+                            'hsl(200, 80%, 50%)',   // minor
+                            'hsl(35, 90%, 55%)',    // moderate
+                            'hsl(0, 85%, 60%)'      // major
+                        ],
+                        borderColor: 'hsl(220, 20%, 14%)',
+                        borderWidth: 2,
+                        hoverOffset: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: 'hsl(210, 15%, 75%)',
+                                font: { family: 'Inter', size: 10 },
+                                padding: 12,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'hsl(220, 20%, 14%)',
+                            bodyColor: 'hsl(210, 30%, 95%)',
+                            borderColor: 'hsl(220, 15%, 22%)',
+                            borderWidth: 1,
+                            bodyFont: { family: 'Inter' }
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+        }
+
+        // 3. Most Flagged Compounds Horizontal Bar Chart
+        const canvasFlagged = document.getElementById('chart-flagged-compounds');
+        if (canvasFlagged) {
+            const ctxFlagged = canvasFlagged.getContext('2d');
+            if (flaggedCompoundsChart) flaggedCompoundsChart.destroy();
+            
+            const flaggedData = metrics.most_flagged_drugs || { labels: [], values: [] };
+            
+            flaggedCompoundsChart = new Chart(ctxFlagged, {
+                type: 'bar',
+                data: {
+                    labels: flaggedData.labels,
+                    datasets: [{
+                        data: flaggedData.values,
+                        backgroundColor: 'hsla(175, 75%, 45%, 0.7)',
+                        borderColor: 'hsl(175, 75%, 45%)',
+                        borderWidth: 1.5,
+                        borderRadius: 4,
+                        barThickness: 16
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'hsl(220, 20%, 14%)',
+                            bodyColor: 'hsl(210, 30%, 95%)',
+                            borderColor: 'hsl(220, 15%, 22%)',
+                            borderWidth: 1,
+                            bodyFont: { family: 'Inter' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'hsla(220, 15%, 22%, 0.4)' },
+                            ticks: { color: 'hsl(210, 15%, 75%)', font: { family: 'Inter', size: 10 }, stepSize: 1, beginAtZero: true }
+                        },
+                        y: {
+                            grid: { display: false },
+                            ticks: { color: 'hsl(210, 15%, 75%)', font: { family: 'Inter', size: 10 } }
+                        }
+                    }
+                }
+            });
         }
     };
 
