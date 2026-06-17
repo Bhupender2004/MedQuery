@@ -163,6 +163,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Helper to construct and render Chart.js graphs
     const renderCharts = (metrics) => {
+        const styles = getComputedStyle(document.documentElement);
+        const textPrimary = styles.getPropertyValue('--text-primary').trim() || 'hsl(210, 30%, 95%)';
+        const textSecondary = styles.getPropertyValue('--text-secondary').trim() || 'hsl(210, 15%, 75%)';
+        const borderVal = styles.getPropertyValue('--border-color').trim() || 'hsl(220, 15%, 22%)';
+        const bgSecondary = styles.getPropertyValue('--bg-secondary').trim() || 'hsl(220, 20%, 14%)';
+        const accentTeal = styles.getPropertyValue('--accent-teal').trim() || 'hsl(175, 75%, 45%)';
+        const accentTealGlow = styles.getPropertyValue('--accent-teal-glow').trim() || 'hsla(175, 75%, 45%, 0.08)';
+
         // 1. Weekly Audit Volume Line Chart
         const canvasVolume = document.getElementById('chart-audit-volume');
         if (canvasVolume) {
@@ -177,13 +185,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     datasets: [{
                         label: 'Queries Checked',
                         data: volumeData.values,
-                        borderColor: 'hsl(175, 75%, 45%)',
-                        backgroundColor: 'hsla(175, 75%, 45%, 0.08)',
+                        borderColor: accentTeal,
+                        backgroundColor: accentTealGlow,
                         borderWidth: 2.5,
                         fill: true,
                         tension: 0.35,
-                        pointBackgroundColor: 'hsl(175, 75%, 45%)',
-                        pointBorderColor: 'hsl(210, 30%, 95%)',
+                        pointBackgroundColor: accentTeal,
+                        pointBorderColor: textPrimary,
                         pointHoverRadius: 6,
                         pointRadius: 4
                     }]
@@ -194,10 +202,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     plugins: {
                         legend: { display: false },
                         tooltip: {
-                            backgroundColor: 'hsl(220, 20%, 14%)',
-                            titleColor: 'hsl(210, 30%, 95%)',
-                            bodyColor: 'hsl(210, 15%, 75%)',
-                            borderColor: 'hsl(220, 15%, 22%)',
+                            backgroundColor: bgSecondary,
+                            titleColor: textPrimary,
+                            bodyColor: textSecondary,
+                            borderColor: borderVal,
                             borderWidth: 1,
                             titleFont: { family: 'Inter', weight: '600' },
                             bodyFont: { family: 'Inter' }
@@ -205,12 +213,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     scales: {
                         x: {
-                            grid: { color: 'hsla(220, 15%, 22%, 0.4)' },
-                            ticks: { color: 'hsl(210, 15%, 75%)', font: { family: 'Inter', size: 10 } }
+                            grid: { color: borderVal },
+                            ticks: { color: textSecondary, font: { family: 'Inter', size: 10 } }
                         },
                         y: {
-                            grid: { color: 'hsla(220, 15%, 22%, 0.4)' },
-                            ticks: { color: 'hsl(210, 15%, 75%)', font: { family: 'Inter', size: 10 }, stepSize: 1, beginAtZero: true }
+                            grid: { color: borderVal },
+                            ticks: { color: textSecondary, font: { family: 'Inter', size: 10 }, stepSize: 1, beginAtZero: true }
                         }
                     }
                 }
@@ -224,7 +232,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (severityBreakdownChart) severityBreakdownChart.destroy();
             
             const dist = metrics.severity_distribution || { minor: 0, moderate: 0, major: 0 };
-            const totalWarns = dist.minor + dist.moderate + dist.major;
             
             severityBreakdownChart = new Chart(ctxSeverity, {
                 type: 'doughnut',
@@ -237,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             'hsl(35, 90%, 55%)',    // moderate
                             'hsl(0, 85%, 60%)'      // major
                         ],
-                        borderColor: 'hsl(220, 20%, 14%)',
+                        borderColor: bgSecondary,
                         borderWidth: 2,
                         hoverOffset: 6
                     }]
@@ -249,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         legend: {
                             position: 'bottom',
                             labels: {
-                                color: 'hsl(210, 15%, 75%)',
+                                color: textSecondary,
                                 font: { family: 'Inter', size: 10 },
                                 padding: 12,
                                 usePointStyle: true,
@@ -257,9 +264,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             }
                         },
                         tooltip: {
-                            backgroundColor: 'hsl(220, 20%, 14%)',
-                            bodyColor: 'hsl(210, 30%, 95%)',
-                            borderColor: 'hsl(220, 15%, 22%)',
+                            backgroundColor: bgSecondary,
+                            bodyColor: textPrimary,
+                            borderColor: borderVal,
                             borderWidth: 1,
                             bodyFont: { family: 'Inter' }
                         }
@@ -283,8 +290,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     labels: flaggedData.labels,
                     datasets: [{
                         data: flaggedData.values,
-                        backgroundColor: 'hsla(175, 75%, 45%, 0.7)',
-                        borderColor: 'hsl(175, 75%, 45%)',
+                        backgroundColor: accentTealGlow,
+                        borderColor: accentTeal,
                         borderWidth: 1.5,
                         borderRadius: 4,
                         barThickness: 16
@@ -297,21 +304,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     plugins: {
                         legend: { display: false },
                         tooltip: {
-                            backgroundColor: 'hsl(220, 20%, 14%)',
-                            bodyColor: 'hsl(210, 30%, 95%)',
-                            borderColor: 'hsl(220, 15%, 22%)',
+                            backgroundColor: bgSecondary,
+                            bodyColor: textPrimary,
+                            borderColor: borderVal,
                             borderWidth: 1,
                             bodyFont: { family: 'Inter' }
                         }
                     },
                     scales: {
                         x: {
-                            grid: { color: 'hsla(220, 15%, 22%, 0.4)' },
-                            ticks: { color: 'hsl(210, 15%, 75%)', font: { family: 'Inter', size: 10 }, stepSize: 1, beginAtZero: true }
+                            grid: { color: borderVal },
+                            ticks: { color: textSecondary, font: { family: 'Inter', size: 10 }, stepSize: 1, beginAtZero: true }
                         },
                         y: {
                             grid: { display: false },
-                            ticks: { color: 'hsl(210, 15%, 75%)', font: { family: 'Inter', size: 10 } }
+                            ticks: { color: textSecondary, font: { family: 'Inter', size: 10 } }
                         }
                     }
                 }
@@ -414,4 +421,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load metrics initially on boot
     reloadDashboardMetrics();
+
+    // Redraw charts when theme changes
+    window.addEventListener('themechanged', () => {
+        reloadDashboardMetrics();
+    });
 });

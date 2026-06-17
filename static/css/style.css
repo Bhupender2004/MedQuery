@@ -18,6 +18,7 @@
     --accent-teal: hsl(175, 75%, 45%);
     --accent-teal-hover: hsl(175, 75%, 38%);
     --accent-teal-glow: hsla(175, 75%, 45%, 0.15);
+    --text-on-accent: hsl(220, 25%, 5%);
     
     --warning-major: hsl(0, 85%, 60%);
     --warning-major-glow: hsla(0, 85%, 60%, 0.15);
@@ -29,6 +30,45 @@
     
     --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Shadow and overlay tokens */
+    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.25);
+    --shadow-card-hover: 0 8px 30px rgba(0, 0, 0, 0.4);
+    --shadow-btn: 0 4px 12px var(--accent-teal-glow);
+    --shadow-modal: 0 10px 40px rgba(0, 0, 0, 0.5);
+    --bg-modal-overlay: rgba(10, 15, 25, 0.85);
+    --bg-backdrop-filter: blur(8px);
+}
+
+:root.light-theme {
+    /* Sophisticated medical light theme (Clean Alabaster, Cool Gray & Vibrant Teal) */
+    --bg-primary: hsl(220, 30%, 97%);
+    --bg-secondary: hsl(0, 0%, 100%);
+    --bg-tertiary: hsl(220, 20%, 93%);
+    
+    --text-primary: hsl(220, 40%, 15%);
+    --text-secondary: hsl(220, 15%, 35%);
+    --text-muted: hsl(220, 10%, 55%);
+    
+    --accent-teal: hsl(175, 80%, 35%);
+    --accent-teal-hover: hsl(175, 85%, 28%);
+    --accent-teal-glow: hsla(175, 80%, 35%, 0.08);
+    --text-on-accent: hsl(0, 0%, 100%);
+    
+    --warning-major: hsl(355, 75%, 45%);
+    --warning-major-glow: hsla(355, 75%, 45%, 0.08);
+    --warning-moderate: hsl(35, 85%, 45%);
+    --warning-minor: hsl(200, 80%, 40%);
+
+    --border-color: hsl(220, 20%, 88%);
+    --border-glow: hsla(175, 80%, 35%, 0.25);
+
+    /* Softer, crisp shadows for light backgrounds */
+    --shadow-card: 0 4px 20px rgba(10, 15, 25, 0.05);
+    --shadow-card-hover: 0 8px 30px rgba(10, 15, 25, 0.09);
+    --shadow-btn: 0 4px 12px var(--accent-teal-glow);
+    --shadow-modal: 0 10px 40px rgba(10, 15, 25, 0.12);
+    --bg-modal-overlay: rgba(255, 255, 255, 0.75);
 }
 
 /* Base resets & layout rules */
@@ -67,6 +107,12 @@ header {
     align-items: center;
 }
 
+nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
 .logo-brand {
     text-decoration: none;
     color: var(--text-primary);
@@ -100,6 +146,36 @@ header {
     background-color: var(--bg-tertiary);
 }
 
+/* Theme Toggle Button Styling */
+.theme-toggle-btn {
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    cursor: pointer;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    transition: var(--transition-smooth);
+    box-shadow: var(--shadow-card);
+    padding: 0;
+    margin: 0;
+}
+
+.theme-toggle-btn:hover {
+    background-color: var(--border-color);
+    border-color: var(--accent-teal);
+    transform: scale(1.05);
+}
+
+.theme-toggle-btn:focus {
+    outline: none;
+    border-color: var(--accent-teal);
+}
+
 /* Main Grid layout */
 main {
     flex: 1;
@@ -115,20 +191,20 @@ main {
     border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 1rem 1.25rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--shadow-card);
     transition: var(--transition-smooth);
 }
 
 .dashboard-card:hover {
     transform: translateY(-2px);
     border-color: var(--border-glow);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--shadow-card-hover);
 }
 
 /* Button UI standards */
 .btn-primary {
     background-color: var(--accent-teal);
-    color: hsl(220, 25%, 5%);
+    color: var(--text-on-accent);
     border: 1px solid transparent;
     border-radius: 8px;
     padding: 0.5rem 1.25rem;
@@ -140,7 +216,7 @@ main {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    box-shadow: 0 4px 12px var(--accent-teal-glow);
+    box-shadow: var(--shadow-btn);
 }
 
 .btn-primary:hover {
@@ -329,7 +405,7 @@ footer {
     flex-direction: column;
     height: 100%;
     overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--shadow-card);
 }
 
 .sidebar-header {
@@ -486,8 +562,8 @@ footer {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(10, 15, 25, 0.85);
-    backdrop-filter: blur(8px);
+    background-color: var(--bg-modal-overlay);
+    backdrop-filter: var(--bg-backdrop-filter);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -504,7 +580,7 @@ footer {
     max-height: 85vh;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--shadow-modal);
     animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 

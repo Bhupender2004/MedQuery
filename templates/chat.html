@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MedQuery - Assistant Chat</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script>
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.add('light-theme');
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -17,6 +22,9 @@
                     <li><a href="/upload">Upload Desk</a></li>
                     <li><a href="/dashboard">Analytics Console</a></li>
                 </ul>
+                <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle Theme">
+                    <span class="theme-icon">☀️</span>
+                </button>
             </nav>
         </div>
     </header>
@@ -93,6 +101,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
     <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
 </body>
 </html>
