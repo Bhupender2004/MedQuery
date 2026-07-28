@@ -38,6 +38,12 @@ class IngestionService:
                 with open(filepath, 'r', encoding='utf-8', errors='ignore') as file_stream:
                     raw_text = file_stream.read()
                 chunks = Chunker.split_text(raw_text, chunk_size=800, chunk_overlap=150)
+            elif file_ext in ['png', 'jpg', 'jpeg', 'webp']:
+                # For images, create a vector metadata placeholder segment
+                chunks = [{
+                    "text": f"[IMAGE FILE ATTACHMENT: {filename}] Uploaded medical image reference for visual analysis.",
+                    "page": 1
+                }]
             elif file_ext == 'pdf':
                 import pypdf
                 reader = pypdf.PdfReader(filepath)

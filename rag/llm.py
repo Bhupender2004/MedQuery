@@ -13,7 +13,7 @@ class LLMService:
     """
 
     @staticmethod
-    def generate_response(query, contexts, drug_alert):
+    def generate_response(query, contexts, drug_alert, image_paths=None):
         """
         Formulates clinical replies using the Gemini model.
         
@@ -21,6 +21,7 @@ class LLMService:
             query (str): User query text.
             contexts (list): Retrieval chunks.
             drug_alert (dict): Active drug safety checks.
+            image_paths (list, optional): Absolute filepaths of attached images.
             
         Returns:
             str: Markdown formatted response.
@@ -44,7 +45,7 @@ class LLMService:
             "You are an expert clinical pharmacist and medical assistant acting on behalf of MedQuery.\n"
             "Your duties include:\n"
             "1. Answering general medical and pharmaceutical questions thoroughly and accurately.\n"
-            "2. If the user refers to or asks about their uploaded document, prescription, or medical report, "
+            "2. If the user refers to or asks about their uploaded document, image, prescription, or medical report, "
             "summarize the content clearly (identifying active medications, dosages, instructions, or lab values) "
             "and suggest relevant standard treatments, drug safety warnings, and clinical precautions.\n"
             "3. If active drug-drug interactions are flagged in DATABASE SAFETY ALERTS, highlight them clearly and "
@@ -62,15 +63,27 @@ class LLMService:
             f"--- REFERENCE CONTEXTS (INCLUDING UPLOADED CLINICAL DOCUMENTS) ---\n"
             f"{reference_text}\n\n"
             f"Please generate a clinical response in structured markdown. "
-            f"If the question pertains to summarizing or analyzing an uploaded medical report or prescription, "
+            f"If the question pertains to summarizing or analyzing an uploaded medical report, prescription, or image, "
             f"perform a full summary and suggest standard treatment options/clinical guidance. "
             f"Cite any reference documents and page numbers explicitly."
         )
 
+        # Prepare multimodal inputs if images are provided
+        pil_images = []
+        if image_paths:
+            from PIL import Image
+            for img_path in image_paths:
+                try:
+                    if os.path.exists(img_path):
+                        img = Image.open(img_path)
+                        pil_images.append(img)
+                except Exception as img_err:
+                    print(f"Warning: Failed to load image at {img_path}: {img_err}")
+
         # Fallback to simulation if api key is missing
         if not api_key:
             print("Warning: GEMINI_API_KEY environment variable is blank. Utilizing local mock responder.")
-            return LLMService._mock_gemini_generation(query, has_warnings, severity, alert_desc, contexts)
+            return LLMService._mock_gemini_generation(query, has_warnings, severity, alert_desc, contexts, image_paths)
 
         try:
             import google.generativeai as genai
@@ -79,6 +92,9 @@ class LLMService:
             # Try models in order of preference
             models_to_try = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash']
             
+            # Formulate content list (multimodal input if images are present)
+            content_payload = [prompt] + pil_images if pil_images else prompt
+
             for model_name in models_to_try:
                 try:
                     # Using the latest Gemini models for fast and cost-effective clinical outputs
@@ -86,7 +102,7 @@ class LLMService:
                         model_name=model_name,
                         system_instruction=system_rules
                     )
-                    response = model.generate_content(prompt)
+                    response = model.generate_content(content_payload)
                     return response.text
                 except Exception as model_err:
                     print(f"Gemini API model {model_name} invocation failed: {model_err}.")
@@ -95,10 +111,10 @@ class LLMService:
             
         except Exception as api_err:
             print(f"Gemini API invocation failed: {api_err}. Reverting to offline mockup.")
-            return LLMService._mock_gemini_generation(query, has_warnings, severity, alert_desc, contexts)
+            return LLMService._mock_gemini_generation(query, has_warnings, severity, alert_desc, contexts, image_paths)
 
     @staticmethod
-    def _mock_gemini_generation(query, has_warnings, severity, alert_desc, contexts):
+    def _mock_gemini_generation(query, has_warnings, severity, alert_desc, contexts, image_paths=None):
         """
         Creates simulated clinical answers for demonstration when Gemini API is offline.
         """

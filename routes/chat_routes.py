@@ -21,15 +21,26 @@ def ask_question():
             "session_id": "session-1234"
         }
     """
-    data = request.get_json() or {}
-    query = data.get('query')
-    session_id = data.get('session_id')
+    files = []
+    if request.content_type and 'multipart/form-data' in request.content_type:
+        query = request.form.get('query', '').strip()
+        session_id = request.form.get('session_id')
+        files = request.files.getlist('files')
+        if not files and 'file' in request.files:
+            files = [request.files['file']]
+    else:
+        data = request.get_json() or {}
+        query = (data.get('query') or '').strip()
+        session_id = data.get('session_id')
 
-    if not query:
-        return jsonify({'error': 'A non-empty query parameter is required.'}), 400
+    if not query and not files:
+        return jsonify({'error': 'A query or file attachment is required.'}), 400
+
+    if not query and files:
+        query = "Please analyze and summarize the attached document/image."
 
     try:
-        response_payload = ChatService.process_query(query, session_id)
+        response_payload = ChatService.process_query(query, session_id=session_id, files=files)
         return jsonify(response_payload), 200
     except Exception as err:
         return jsonify({

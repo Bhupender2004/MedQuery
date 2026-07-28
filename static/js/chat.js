@@ -244,11 +244,87 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
 
+    // Attachment handling elements
+    const chatAttachBtn = document.getElementById('chat-attach-btn');
+    const chatFileInput = document.getElementById('chat-file-input');
+    const attachedFilesPreview = document.getElementById('attached-files-preview');
+
+    let pendingFiles = [];
+
+    // Render attachment chips preview above input bar
+    const renderPreviewChips = () => {
+        if (!attachedFilesPreview) return;
+        attachedFilesPreview.innerHTML = '';
+        if (pendingFiles.length === 0) {
+            attachedFilesPreview.style.display = 'none';
+            return;
+        }
+        attachedFilesPreview.style.display = 'flex';
+
+        pendingFiles.forEach((file, index) => {
+            const chip = document.createElement('div');
+            chip.className = 'file-chip';
+
+            const isImage = file.type.startsWith('image/');
+            if (isImage) {
+                const imgThumb = document.createElement('img');
+                imgThumb.className = 'file-chip-thumb';
+                imgThumb.src = URL.createObjectURL(file);
+                imgThumb.alt = file.name;
+                chip.appendChild(imgThumb);
+            } else {
+                const iconSpan = document.createElement('span');
+                iconSpan.className = 'file-chip-icon';
+                iconSpan.textContent = file.name.endsWith('.pdf') ? '📄' : '📝';
+                chip.appendChild(iconSpan);
+            }
+
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'file-chip-name';
+            nameSpan.textContent = file.name;
+            chip.appendChild(nameSpan);
+
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'file-chip-remove';
+            removeBtn.innerHTML = '&times;';
+            removeBtn.title = 'Remove file';
+            removeBtn.addEventListener('click', () => {
+                pendingFiles.splice(index, 1);
+                renderPreviewChips();
+            });
+            chip.appendChild(removeBtn);
+
+            attachedFilesPreview.appendChild(chip);
+        });
+    };
+
+    if (chatAttachBtn && chatFileInput) {
+        chatAttachBtn.addEventListener('click', () => {
+            chatFileInput.click();
+        });
+
+        chatFileInput.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files.length > 0) {
+                Array.from(e.target.files).forEach(f => {
+                    // Prevent duplicate files with same name and size
+                    if (!pendingFiles.some(pf => pf.name === f.name && pf.size === f.size)) {
+                        pendingFiles.push(f);
+                    }
+                });
+                renderPreviewChips();
+                chatFileInput.value = '';
+            }
+        });
+    }
+
     // Start a completely fresh chat
     const startNewChat = () => {
         currentSessionId = generateSessionId();
         localStorage.setItem('medquery_current_session', currentSessionId);
         window.location.hash = '';
+        pendingFiles = [];
+        renderPreviewChips();
         renderWelcomeMessage();
         
         // Deselect sidebar items
@@ -264,7 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
     chatForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         const queryText = chatInput.value.trim();
-        if (!queryText) return;
+        if (!queryText && pendingFiles.length === 0) return;
 
         // Ensure we have an active session ID
         if (!currentSessionId) {
@@ -272,24 +348,57 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('medquery_current_session', currentSessionId);
         }
 
-        // Render user question bubble
-        appendMessage('user', queryText);
+        const filesToSend = [...pendingFiles];
+        pendingFiles = [];
+        renderPreviewChips();
+
+        // Build user message content with text and attachment tags
+        let userMessageHtml = '';
+        const displayText = queryText || 'Please analyze and summarize the attached file(s).';
+        userMessageHtml += `<p>${displayText}</p>`;
+        
+        if (filesToSend.length > 0) {
+            userMessageHtml += `<div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.5rem;">`;
+            filesToSend.forEach(f => {
+                const icon = f.type.startsWith('image/') ? '🖼️' : (f.name.endsWith('.pdf') ? '📄' : '📝');
+                userMessageHtml += `<span class="message-attachment-tag">${icon} ${f.name}</span>`;
+            });
+            userMessageHtml += `</div>`;
+        }
+
+        appendMessage('user', userMessageHtml, true);
         chatInput.value = '';
 
         // Render loading state indicator
-        const loadingBubbleId = appendMessage('assistant', 'Analyzing medical references and compound databases...');
+        const loadingMsg = filesToSend.length > 0 
+            ? 'Uploading & analyzing attached file(s) and clinical databases...'
+            : 'Analyzing medical references and compound databases...';
+        const loadingBubbleId = appendMessage('assistant', loadingMsg);
 
         try {
-            const apiResponse = await fetch('/api/chat/ask', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    query: queryText,
-                    session_id: currentSessionId
-                })
-            });
+            let apiResponse;
+            if (filesToSend.length > 0) {
+                const formData = new FormData();
+                formData.append('query', queryText);
+                formData.append('session_id', currentSessionId);
+                filesToSend.forEach(f => formData.append('files', f));
+
+                apiResponse = await fetch('/api/chat/ask', {
+                    method: 'POST',
+                    body: formData
+                });
+            } else {
+                apiResponse = await fetch('/api/chat/ask', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        query: queryText,
+                        session_id: currentSessionId
+                    })
+                });
+            }
 
             const data = await apiResponse.json();
             removeMessage(loadingBubbleId);

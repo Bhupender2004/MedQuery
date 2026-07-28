@@ -48,7 +48,7 @@ def test_chat_endpoint_validation(client):
     # 1. Missing query
     res = client.post('/api/chat/ask', json={})
     assert res.status_code == 400
-    assert b"query parameter is required" in res.data
+    assert b"query or file attachment is required" in res.data
     
     # 2. Correct query with warnings
     with patch('services.chat_service.LLMService.generate_response') as mock_llm:
@@ -78,7 +78,7 @@ def test_upload_endpoint_validation(client):
     
     # 2. Disallowed extension
     data_disallowed = {
-        'file': (BytesIO(b"file content"), 'test.png')
+        'file': (BytesIO(b"file content"), 'test.exe')
     }
     res = client.post('/api/upload', data=data_disallowed, content_type='multipart/form-data')
     assert res.status_code == 400
@@ -157,4 +157,21 @@ def test_delete_operations(client):
     assert history_res3.status_code == 200
     history_data3 = json.loads(history_res3.data)
     assert len(history_data3) == 0
+
+def test_chat_attachment_endpoint(client):
+    data = {
+        'query': 'Summarize this test report',
+        'session_id': 'session-attach-test',
+        'files': (BytesIO(b"Patient Report: BP 120/80. Aspirin 75mg daily."), 'report.txt')
+    }
+    with patch('services.chat_service.LLMService.generate_response') as mock_llm:
+        mock_llm.return_value = "Summary of attached report."
+        res = client.post('/api/chat/ask', data=data, content_type='multipart/form-data')
+        assert res.status_code == 200
+        resp_json = json.loads(res.data)
+        assert 'response' in resp_json
+        assert 'attachments' in resp_json
+        assert len(resp_json['attachments']) == 1
+        assert resp_json['attachments'][0]['filename'] == 'report.txt'
+
 

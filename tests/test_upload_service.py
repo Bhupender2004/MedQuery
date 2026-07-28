@@ -33,8 +33,8 @@ def test_allowed_file():
     assert UploadService.allowed_file("test.pdf") is True
     assert UploadService.allowed_file("test.txt") is True
     assert UploadService.allowed_file("test.csv") is True
-    assert UploadService.allowed_file("test.png") is False
-    assert UploadService.allowed_file("test.docx") is False
+    assert UploadService.allowed_file("test.png") is True
+    assert UploadService.allowed_file("test.exe") is False
     assert UploadService.allowed_file("test") is False
 
 def test_get_document_status_missing(app):

@@ -18,86 +18,116 @@ class ChatService:
     """
 
     @staticmethod
-    def process_query(query, session_id=None):
+    def process_query(query, session_id=None, files=None):
         """
         Executes complete RAG query transaction.
-        1. Checks for structured drug-drug interaction alerts in text.
-        2. Retrieves semantic match chunks from ChromaDB.
-        3. Formulates a prompt and calls Google Gemini API.
-        4. Logs transaction parameters to MySQL database.
+        1. Process any attached files/images and ingests them.
+        2. Checks for structured drug-drug interaction alerts in text.
+        3. Retrieves semantic match chunks from ChromaDB.
+        4. Formulates a prompt and calls Google Gemini API.
+        5. Logs transaction parameters to MySQL database.
         
         Args:
             query (str): User query sentence.
             session_id (str, optional): Chat session ID.
+            files (list, optional): List of attached FileStorage objects.
             
         Returns:
             dict: Structured response object.
         """
-        # Fast-path greeting and help classification
-        query_clean = query.strip().lower().rstrip('?.!')
-        words = query_clean.split()
+        attached_files_info = []
+        image_paths = []
         
-        is_greeting = False
-        greeting_keywords = {'hi', 'hello', 'hey', 'greetings', 'howdy', 'hola'}
-        if len(words) <= 3 and any(w in greeting_keywords for w in words):
-            is_greeting = True
-        elif query_clean in {'good morning', 'good afternoon', 'good evening', 'hello there', 'hi there'}:
-            is_greeting = True
+        if files:
+            from services.upload_service import UploadService
+            from rag.ingest import IngestionService
+            from models.document_model import Document
+            for file_item in files:
+                if file_item and file_item.filename:
+                    try:
+                        res = UploadService.handle_upload(file_item, session_id=session_id)
+                        doc_id = res.get('document_id')
+                        doc_record = Document.query.get(doc_id)
+                        if doc_record:
+                            # Ingest synchronously so document/image vector chunks are immediately accessible
+                            IngestionService.ingest_file(doc_record.filepath, doc_id)
+                            ext = doc_record.filename.rsplit('.', 1)[1].lower() if '.' in doc_record.filename else ''
+                            if ext in ['png', 'jpg', 'jpeg', 'webp']:
+                                image_paths.append(doc_record.filepath)
+                            attached_files_info.append({
+                                'filename': doc_record.filename,
+                                'id': doc_id
+                            })
+                    except Exception as upload_err:
+                        print(f"Warning: Failed to process attached file {file_item.filename}: {upload_err}")
+
+        # Fast-path greeting and help classification (only if no files attached)
+        if not files:
+            query_clean = query.strip().lower().rstrip('?.!')
+            words = query_clean.split()
             
-        is_help = False
-        help_keywords = {'help', 'info', 'information', 'instructions', 'guide'}
-        if len(words) <= 4 and any(w in help_keywords for w in words):
-            is_help = True
-        elif query_clean in {'who are you', 'what are you', 'what is this', 'what is medquery', 'what do you do', 'how does this work', 'how can you help', 'how to use this'}:
-            is_help = True
+            is_greeting = False
+            greeting_keywords = {'hi', 'hello', 'hey', 'greetings', 'howdy', 'hola'}
+            if len(words) <= 3 and any(w in greeting_keywords for w in words):
+                is_greeting = True
+            elif query_clean in {'good morning', 'good afternoon', 'good evening', 'hello there', 'hi there'}:
+                is_greeting = True
+                
+            is_help = False
+            help_keywords = {'help', 'info', 'information', 'instructions', 'guide'}
+            if len(words) <= 4 and any(w in help_keywords for w in words):
+                is_help = True
+            elif query_clean in {'who are you', 'what are you', 'what is this', 'what is medquery', 'what do you do', 'how does this work', 'how can you help', 'how to use this'}:
+                is_help = True
 
-        if is_greeting or is_help:
-            if is_greeting:
-                ai_response = (
-                    "### 👋 Hello! I am MedQuery, your AI-powered clinical pharmacy assistant.\n\n"
-                    "I can help you analyze drug-drug interactions, query medical references, and review safety guidelines. "
-                    "You can ask me questions like:\n"
-                    "- *\"Can I take Aspirin with Warfarin?\"*\n"
-                    "- *\"Is there an issue with Ibuprofen and Lisinopril?\"*\n"
-                    "- *\"What are the side effects of Metformin?\"*\n\n"
-                    "Additionally, you can upload prescriptions or medical reports in the **Upload Desk** and ask me to summarize them.\n\n"
-                    "---\n"
-                    "*Disclaimer: Always consult a licensed healthcare professional before making any medical decisions.*"
-                )
-            else:
-                ai_response = (
-                    "### ℹ️ How to use MedQuery\n\n"
-                    "MedQuery is designed to assist healthcare professionals in checking medication safety and analyzing clinical documents:\n\n"
-                    "1. **Drug Interactions**: Type two or more drug names (e.g., *\"Warfarin + Aspirin\"*) to check if they have known adverse interactions.\n"
-                    "2. **Medical Queries**: Ask general pharmacological questions about drug mechanisms, dosages, or side effects.\n"
-                    "3. **Document Analysis**: Go to the **Upload Desk**, upload a patient prescription or medical report (PDF/TXT), and then ask questions about the document here.\n\n"
-                    "---\n"
-                    "*Disclaimer: MedQuery is an educational and analytical tool. Always verify clinical findings with official medical references.*"
-                )
+            if is_greeting or is_help:
+                if is_greeting:
+                    ai_response = (
+                        "### 👋 Hello! I am MedQuery, your AI-powered clinical pharmacy assistant.\n\n"
+                        "I can help you analyze drug-drug interactions, query medical references, and review safety guidelines. "
+                        "You can ask me questions like:\n"
+                        "- *\"Can I take Aspirin with Warfarin?\"*\n"
+                        "- *\"Is there an issue with Ibuprofen and Lisinopril?\"*\n"
+                        "- *\"What are the side effects of Metformin?\"*\n\n"
+                        "Additionally, you can attach prescriptions or medical images directly using the **📎 Attach** button or upload documents in the **Upload Desk**.\n\n"
+                        "---\n"
+                        "*Disclaimer: Always consult a licensed healthcare professional before making any medical decisions.*"
+                    )
+                else:
+                    ai_response = (
+                        "### ℹ️ How to use MedQuery\n\n"
+                        "MedQuery is designed to assist healthcare professionals in checking medication safety and analyzing clinical documents:\n\n"
+                        "1. **Drug Interactions**: Type two or more drug names (e.g., *\"Warfarin + Aspirin\"*) to check if they have known adverse interactions.\n"
+                        "2. **Medical Queries & Attachments**: Ask general pharmacological questions or use the **📎 Attach** button in the chat input to send images or PDFs of prescriptions and lab reports.\n"
+                        "3. **Document Analysis**: You can also use the **Upload Desk** to upload larger patient prescriptions or medical guidelines.\n\n"
+                        "---\n"
+                        "*Disclaimer: MedQuery is an educational and analytical tool. Always verify clinical findings with official medical references.*"
+                    )
 
-            # Fast log saving
-            try:
-                log_entry = QueryLog(
-                    session_id=session_id,
-                    user_query=query,
-                    ai_response=ai_response,
-                    citations=json.dumps([]),
-                    has_interaction_warnings=False,
-                    severity_level='none'
-                )
-                db.session.add(log_entry)
-                db.session.commit()
-            except Exception as db_err:
-                db.session.rollback()
-                print(f"Warning: Failed to save fast-path query log: {db_err}")
+                # Fast log saving
+                try:
+                    log_entry = QueryLog(
+                        session_id=session_id,
+                        user_query=query,
+                        ai_response=ai_response,
+                        citations=json.dumps([]),
+                        has_interaction_warnings=False,
+                        severity_level='none'
+                    )
+                    db.session.add(log_entry)
+                    db.session.commit()
+                except Exception as db_err:
+                    db.session.rollback()
+                    print(f"Warning: Failed to save fast-path query log: {db_err}")
 
-            return {
-                'response': ai_response,
-                'has_warnings': False,
-                'severity': 'none',
-                'description': '',
-                'citations': []
-            }
+                return {
+                    'response': ai_response,
+                    'has_warnings': False,
+                    'severity': 'none',
+                    'description': '',
+                    'citations': [],
+                    'attachments': attached_files_info
+                }
 
         # 1. Structural Interaction check
         drug_alert = DrugChecker.analyze_query(query)
@@ -108,7 +138,7 @@ class ChatService:
         chunks = RetrievalService.retrieve(query, session_id=session_id)
 
         # 3. LLM Orchestrator reasoning
-        ai_response = LLMService.generate_response(query, chunks, drug_alert)
+        ai_response = LLMService.generate_response(query, chunks, drug_alert, image_paths=image_paths)
 
         # 4. Serialize citations metadata
         citations_data = [
@@ -156,7 +186,8 @@ class ChatService:
             'has_warnings': has_warnings,
             'severity': severity,
             'description': drug_alert.get('description', ''),
-            'citations': chunks
+            'citations': chunks,
+            'attachments': attached_files_info
         }
 
     @staticmethod

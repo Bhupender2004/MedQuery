@@ -10,7 +10,7 @@ from database.connection import db
 from models.document_model import Document
 from rag.ingest import IngestionService
 
-ALLOWED_EXTENSIONS = {'pdf', 'txt', 'csv'}
+ALLOWED_EXTENSIONS = {'pdf', 'txt', 'csv', 'png', 'jpg', 'jpeg', 'webp'}
 
 class UploadService:
     """
@@ -41,13 +41,14 @@ class UploadService:
             raise ValueError("No valid file payload received.")
 
         if not UploadService.allowed_file(file.filename):
-            raise ValueError("Unsupported extension. Allowed extensions are: PDF, TXT, CSV.")
+            raise ValueError("Unsupported extension. Allowed extensions are: PDF, TXT, CSV, PNG, JPG, JPEG, WEBP.")
 
         filename = secure_filename(file.filename)
         
         # Fetch configurations from Flask App context
         from flask import current_app
         upload_dir = current_app.config.get('UPLOAD_FOLDER', 'uploads')
+        os.makedirs(upload_dir, exist_ok=True)
         
         # Save file to uploads folder
         filepath = os.path.join(upload_dir, filename)
